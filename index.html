@@ -16,23 +16,49 @@
             justify-content: center;
             min-height: 100vh;
         }
-
+    
         h1 {
             font-size: 3rem;
             color: #333;
             margin-bottom: 2rem;
             text-align: center;
         }
-
+    
         .container {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
             max-width: 1200px;
             margin: 0 auto;
             padding: 1rem;
+            width: 100%; /* Добавлено для лучшей адаптивности */
         }
-
+    
+        /* По умолчанию: 1 колонка (для мобильных устройств) */
+        .container {
+            grid-template-columns: repeat(1, 1fr);
+        }
+    
+        /* Для экранов шире 600px: 2 колонки */
+        @media (min-width: 700px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    
+        /* Для экранов шире 900px: 3 колонки */
+        @media (min-width: 900px) {
+            .container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    
+        /* Для экранов шире 1200px: 4 колонки */
+        @media (min-width: 1200px) {
+            .container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    
         .lecture-block {
             background-color: #ffffff;
             border-radius: 15px;
@@ -40,45 +66,79 @@
             padding: 1.5rem;
             text-align: center;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            min-width:max-content;
+            min-width: max-content;
         }
-
+    
         .lecture-block:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
-
+    
         .lecture-title {
             font-size: 1.5rem;
             color: #444;
             margin-bottom: 1rem;
             font-weight: bold;
         }
-
+    
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 1rem;
         }
-
+    
         th, td {
             padding: 0.75rem;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-
+    
         th {
             background-color: #f1f1f1;
             font-weight: bold;
         }
-
+    
         a {
             color: #007bff;
             text-decoration: none;
         }
-
+    
         a:hover {
             text-decoration: underline;
+        }
+    
+        /* Улучшения для маленьких экранов */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem; /* Уменьшаем размер заголовка */
+            }
+    
+            .lecture-block {
+                padding: 1rem; /* Уменьшаем отступы */
+            }
+    
+            .lecture-title {
+                font-size: 1.25rem; /* Уменьшаем размер заголовка блока */
+            }
+    
+            table {
+                font-size: 0.9rem; /* Уменьшаем размер шрифта таблицы */
+            }
+    
+            th, td {
+                padding: 0.5rem; /* Уменьшаем отступы в таблице */
+            }
+        }
+    
+        /* Улучшения для средних экранов */
+        @media (min-width: 601px) and (max-width: 900px) {
+            .lecture-block {
+                padding: 1.25rem; /* Средние отступы */
+            }
+    
+            .lecture-title {
+                font-size: 1.375rem; /* Средний размер заголовка блока */
+            }
         }
     </style>
 </head>

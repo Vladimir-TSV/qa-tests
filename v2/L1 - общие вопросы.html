@@ -2,40 +2,141 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Интерактивный тест</title>
+<title>Общие вопросы по 1 лекции</title>
 <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    h1 {
+        font-size: 5rem;
+        color: #333;
+        margin-bottom: 2rem;
+        text-align: center;
+        font-weight: bold;
+    }
+
     #testContainer, #results { display: none; }
     .question { margin-bottom: 20px; }
-    .start-btn { font-size: 20px; padding: 10px 20px; }
+    .start-btn, .check-btn, .reset-btn, .return-button {
+        font-size: 20px;
+        padding: 10px 20px;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px;
+    }
+    .start-btn {
+        background-color: #007bff;
+        font-size: 40px;
+        padding: 20px 40px;
+        display: block;
+        margin: 0 auto;
+    }
+    .start-btn:hover {
+        background-color: #0056b3;
+    }
+    .check-btn, .reset-btn {
+        background-color: #007bff;
+    }
+    .check-btn:hover, .reset-btn:hover {
+        background-color: #0056b3;
+    }
+    .return-button {
+        background-color: #dc3545;
+    }
+    .return-button:hover {
+        background-color: #c82333;
+    }
     .correct-answer { color: green; font-weight: bold; }
     .incorrect-answer { color: red; font-weight: bold; }
     .feedback { margin-top: 10px; }
     #results ul { list-style-type: none; padding: 0; }
     #results li { margin-bottom: 20px; border: 1px solid #ccc; padding: 10px; }
-    .return-button { display: inline-block; padding: 10px 20px; background-color: dimgray; color: white; text-decoration: none; border-radius: 5px; 
-                     font-size: 1rem; text-align: center; cursor: pointer; border: 0.2px solid rgb(0, 0, 0); margin-top: 5px;}
-    .return-button:hover { background-color: rgb(136, 133, 133); border: 0.2px solid rgb(0, 0, 0); }
+
+    .question label {
+        display: block;
+        margin-bottom: -10px;
+        font-size: 17px;
+    }
+
+    .fixed-top {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: #f9f9f9;
+        padding: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    #testContainer {
+        margin-top: 80px;
+    }
+
+    @media (max-width: 600px) {
+        h1 {
+            font-size: 2rem;
+        }
+        .start-btn, .check-btn, .reset-btn, .return-button {
+            font-size: 30px;
+            padding: 15px 30px;
+        }
+        .start-btn {
+            font-size: 40px;
+            padding: 20px 40px;
+        }
+        .question label {
+            font-size: 19px;
+        }
+    }
+
+    @media (min-width: 601px) and (max-width: 900px) {
+        h1 {
+            font-size: 2.5rem;
+        }
+        .question label {
+            font-size: 18px;
+        }
+    }
 </style>
 </head>
 <body>
-<div id="startContainer">
-    <button class="start-btn" onclick="startTest()">Начать тест</button>
-</div>
-<div id="ReturnContainer">
+<div class="fixed-top" id="fixedTop">
+    <button class="check-btn" onclick="checkAnswers()" style="display: none;">Проверить</button>
+    <button class="reset-btn" onclick="resetTest()" style="display: none;">Начать заново</button>
     <a href="../index.html" class="return-button">Вернуться на главную</a>
 </div>
-<div id="testContainer">
-    <!-- Вопросы будут вставлены сюда -->
+
+<div id="startContainer">
+    <h1>Тест по статусам</h1>
+    <button class="start-btn" onclick="startTest()">Начать тест</button>
 </div>
+
+<div id="testContainer">
+</div>
+
 <div id="results">
     <h3>Результаты:</h3>
     <ul id="resultList"></ul>
-    <button onclick="resetTest()">Начать заново</button>
 </div>
 
 <script>
 const questions = [
-    {
+{
         question: "1. Что такое тестирование?",
         answers: ["Поиск разницы между ожидаемым и фактическим результатом", "Процесс написания кода", "Процесс разработки новых функций", "Процесс документирования кода", "Процесс обучения пользователей"],
         correct: ["Поиск разницы между ожидаемым и фактическим результатом"]
@@ -201,12 +302,13 @@ function startTest() {
         q.answers.forEach(answer => {
             questionDiv.innerHTML += `<label><input type="checkbox" name="question${qIndex}" value="${answer}"> ${answer}</label><br>`;
         });
-        // Добавляем место для отображения правильного ответа
         questionDiv.innerHTML += `<div class="feedback" id="feedback${qIndex}"></div>`;
         testContainer.appendChild(questionDiv);
     });
-    testContainer.innerHTML += '<button onclick="checkAnswers()">Проверить</button>';
     testContainer.style.display = 'block';
+
+    document.querySelector('.check-btn').style.display = 'inline-block';
+    document.querySelector('.reset-btn').style.display = 'inline-block';
 }
 
 function checkAnswers() {
@@ -218,17 +320,14 @@ function checkAnswers() {
             if (input.checked) {
                 selected.push(input.value);
             }
-            // Сбрасываем классы перед проверкой
             input.parentElement.classList.remove('correct', 'incorrect');
         });
 
-        // Проверяем каждый ответ
         let isCorrect = selected.sort().toString() === q.correct.sort().toString();
         if (!isCorrect) {
             results.push(`Вопрос: ${q.question}<br>Выбрано: ${selected.join(', ')}<br>Правильно: ${q.correct.join(', ')}`);
         }
 
-        // Отображаем правильный ответ под вопросом
         const feedbackDiv = document.getElementById(`feedback${qIndex}`);
         feedbackDiv.innerHTML = isCorrect 
             ? `<span class="correct-answer">Ваш ответ правильный!</span>` 
@@ -244,14 +343,15 @@ function resetTest() {
     document.getElementById('results').style.display = 'none';
     document.getElementById('startContainer').style.display = 'block';
     document.getElementById('testContainer').style.display = 'none';
-    // Сбрасываем классы при сбросе теста
     const inputs = document.querySelectorAll('input');
     inputs.forEach(input => {
         input.parentElement.classList.remove('correct', 'incorrect');
     });
-    // Очищаем отзывы
     const feedbacks = document.querySelectorAll('.feedback');
     feedbacks.forEach(feedback => feedback.innerHTML = '');
+
+    document.querySelector('.check-btn').style.display = 'none';
+    document.querySelector('.reset-btn').style.display = 'none';
 }
 </script>
 </body>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Верхняя часть: Имя, счет, ошибки -->
+    <div id="game-top">
+        <div class="game-box">
+            <h2 id="game-player-name"></h2>
+        </div>
+        <div class="game-box">
+            <p>Счет: <span id="game-current-score">0</span></p>
+        </div>
+        <div class="game-box">
+            <p>Ошибки: <span id="game-errors">0</span></p>
+        </div>
+    </div>
+
+    <!-- Часть с вопросом -->
+    <div id="game-question-section">
+        <div class="game-box">
+            <div id="game-question-container" class="question"></div>
+        </div>
+    </div>
+
+    <!-- Часть с вариантами ответов -->
+    <div id="game-answers-section">
+        <div class="game-box">
+            <div id="game-answers-container" class="answers-list"></div>
+        </div>
+    </div>
+
+    <!-- Часть с кнопками -->
+    <div id="game-buttons-section">
+        <div class="game-box">
+            <div id="game-feedback" class="feedback"></div>
+            <div id="game-button-container">
+                <button class="check-btn" id="game-check-answer">Проверить</button>
+                <button class="next-btn" id="game-next-question" style="display: none;">Далее</button>
+                <button class="end-btn" id="game-end-early">Завершить досрочно</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

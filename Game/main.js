@@ -1475,7 +1475,7 @@ const questions = [
             "Документация в Postman.",
             "Документация в SOAP UI."
         ],
-        correct: ["Документация обычно в Swagger или в Open API формате."]
+        correct: ["Документация обычно в Swagger или Redoc."]
     },
     {
         question: "Инструмент для тестирования в REST?",

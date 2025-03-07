@@ -2,7 +2,7 @@
 let playerName = '';
 let score = 0;
 let errors = 0;
-const maxErrors = 5; // Максимальное количество ошибок
+const maxErrors = 10; // Максимальное количество ошибок
 
 // Вопросы для викторины
 const questions = [
@@ -759,12 +759,12 @@ const questions = [
     {
         question: "Где передается информация в SOAP?",
         answers: [
-            "Внутри тегов <header>.",
-            "Внутри тегов <body>.",
-            "Внутри тегов <envelope>.",
-            "Внутри тегов <fault>."
+            "Внутри тегов < header>.",
+            "Внутри тегов < body>.",
+            "Внутри тегов < envelope>.",
+            "Внутри тегов < fault>."
         ],
-        correct: ["Внутри тегов <body>."]
+        correct: ["Внутри тегов < body>."]
     },
     {
         question: "Сколько существует запросов в SOAP?",
@@ -809,12 +809,12 @@ const questions = [
     {
         question: "Где располагается тег <fault> в SOAP-сообщении?",
         answers: [
-            "Внутри тега <header>.",
-            "Внутри тега <body>.",
-            "Внутри тега <envelope>.",
+            "Внутри тега < header>.",
+            "Внутри тега < body>.",
+            "Внутри тега < envelope>.",
             "Вне структуры SOAP-сообщения."
         ],
-        correct: ["Внутри тега <body>."]
+        correct: ["Внутри тега < body>."]
     },
     {
         question: "Где пишется документация в SOAP?",
@@ -1291,10 +1291,10 @@ const questions = [
         answers: [
             "5",
             "10",
-            "16",
+            "17",
             "22"
         ],
-        correct: ["16"]
+        correct: ["17"]
     },
     {
         question: "Какие из перечисленных статусов используются в gRPC? (Выберите все подходящие варианты)",
@@ -1470,12 +1470,12 @@ const questions = [
     {
         question: "Где пишется документация в REST?",
         answers: [
-            "Документация обычно в Swagger или Redoc.",
+            "Документация обычно в Swagger или Open API.",
             "Документация в WSDL.",
             "Документация в Postman.",
             "Документация в SOAP UI."
         ],
-        correct: ["Документация обычно в Swagger или в Open API формате."]
+        correct: ["Документация обычно в Swagger или в Open API."]
     },
     {
         question: "Инструмент для тестирования в REST?",
@@ -1997,6 +1997,179 @@ const questions = [
         ],
         correct: ["301 Moved Permanently"]
     },
+    {
+        question: "Что такое абсолютный URL (URI)?",
+        answers: [ "Путь", "Протокол", "Хост (домен)", "Такого не бывает", "Полная цепочка из протокол://домен:порт(невсегда указан)/путь/путь?квери&квери#якорь"],
+        correct: ["Полная цепочка из протокол://домен:порт(невсегда указан)/путь/путь?квери&квери#якорь"]
+    },
+    {
+        question: "Что такое относительный URL (URN)?",
+        answers: [ "Путь", "Протокол", "Хост (домен)", "Такого не бывает", "Полная цепочка из протокол://домен:порт(невсегда указан)/путь/путь?квери&квери#якорь"],
+        correct: ["Путь"]
+    },
+    {
+        question: "Что такое DevTools?",
+        answers: [
+            "Набор инструментов в браузере для разработки и отладки веб-страниц.",
+            "Программа для редактирования изображений.",
+            "Язык программирования.",
+            "База данных."
+        ],
+        correct: ["Набор инструментов в браузере для разработки и отладки веб-страниц."]
+    },
+    {
+        question: "Как открыть DevTools в браузере Google Chrome?",
+        answers: [
+            "Ctrl + Shift + I",
+            "F12",
+            "Правая кнопка мыши и просмотреть код",
+            "Ctrl + Alt + Delete"
+        ],
+        correct: ["Ctrl + Shift + I", "F12", "Правая кнопка мыши и просмотреть код"]
+    },
+    {
+        question: "Что можно посмотреть в DevTools из списка ниже?",
+        answers: [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "Сетевые запросы",
+            "Ошибки",
+            "Производительность",
+            "Хранилища"
+        ],
+        correct: ["HTML", "CSS", "JavaScript", "Сетевые запросы", "Ошибки", "Производительность", "Хранилища"]
+    },
+    {
+        question: "Какую функцию выполняет вкладка 'Console' в DevTools?",
+        answers: [
+            "Показывает сетевые запросы.",
+            "Показывает ошибки JavaScript.",
+            "Позволяет просматривать и управлять хранилищами.",
+            "Позволяет редактировать HTML."
+        ],
+        correct: ["Показывает ошибки JavaScript."]
+    },
+    {
+        question: "Какую функцию выполняет вкладка 'Elements' в DevTools?",
+        answers: [
+            "Показывает сетевые запросы.",
+            "Позволяет просматривать и редактировать HTML и CSS.",
+            "Позволяет выполнять JavaScript-код.",
+            "Показывает ошибки JavaScript."
+        ],
+        correct: ["Позволяет просматривать и редактировать HTML и CSS."]
+    },
+    {
+        question: "Какую функцию выполняет вкладка 'Network' в DevTools?",
+        answers: [
+            "Позволяет выполнять JavaScript-код.",
+            "Показывает ошибки JavaScript.",
+            "Показывает сетевые запросы и взаимодействие с сервером.",
+            "Позволяет редактировать HTML."
+        ],
+        correct: ["Показывает сетевые запросы и взаимодействие с сервером."]
+    },
+    {
+        question: "Какую функцию выполняет вкладка 'Application' в DevTools?",
+        answers: [
+            "Позволяет просматривать и управлять хранилищами.",
+            "Показывает сетевые запросы.",
+            "Позволяет редактировать HTML.",
+            "Показывает ошибки JavaScript."
+        ],
+        correct: ["Позволяет просматривать и управлять хранилищами."]
+    },
+    {
+        question: "Какая вкладка в DevTools позволяет просматривать HTML-код страницы?",
+        answers: [
+            "Application",
+            "Elements",
+            "Console",
+            "Network"
+        ],
+        correct: ["Elements"]
+    },
+    {
+        question: "Какая вкладка в DevTools позволяет просматривать хранилища браузера?",
+        answers: [
+            "Application",
+            "Elements",
+            "Console",
+            "Network"
+        ],
+        correct: ["Application"]
+    },
+    {
+        question: "Какая вкладка в DevTools позволяет просматривать ошибки клиентской части?",
+        answers: [
+            "Application",
+            "Elements",
+            "Console",
+            "Network"
+        ],
+        correct: ["Console"]
+    },
+    {
+        question: "Какая вкладка в DevTools позволяет просматривать взаимодействие между клиентом и бэкендом?",
+        answers: [
+            "Application",
+            "Elements",
+            "Console",
+            "Network"
+        ],
+        correct: ["Network"]
+    },
+    {
+        question: "Где в DevTools посмотреть body запроса?",
+        answers: [
+            "Во вкладке 'Network' → выберите запрос → вкладка 'Payload' или 'Request'.",
+            "Во вкладке 'Network' → выберите запрос → вкладка 'Response'.",
+            "Во вкладке 'Elements'.",
+            "Во вкладке 'Application'."
+        ],
+        correct: ["Во вкладке 'Network' → выберите запрос → вкладка 'Payload' или 'Request'."]
+    },
+    {
+        question: "Где в DevTools посмотреть body ответа?",
+        answers: [
+            "Во вкладке 'Network' → выберите запрос → вкладка 'Payload' или 'Request'.",
+            "Во вкладке 'Network' → выберите запрос → вкладка 'Response'.",
+            "Во вкладке 'Elements'.",
+            "Во вкладке 'Application'."
+        ],
+        correct: ["Во вкладке 'Network' → выберите запрос → вкладка 'Response'."]
+    },
+    {
+        question: "В DevTools можно скачать все запросы и ответы в формате har, где его лучше всего открывать?",
+        answers: [
+            "В Charles",
+            "В Notepad",
+            "В Excel",
+            "В браузере"
+        ],
+        correct: ["В Charles"]
+    },
+    {
+        question: "Что можно посмотреть во вкладке 'Network'/headers?",
+        answers: [
+            "Заголовки запроса и ответа.",
+            "Метод запроса.",
+            "Статус код.",
+            "URL."
+        ],
+        correct: ["Заголовки запроса и ответа.", "Метод запроса.", "Статус код.", "URL."]
+    },
+    {
+        question: "Какой фильтр к запросам позволяет просматривать только те из них, которые уходят к бэкенду?",
+        answers: [
+            "XHR",
+            "Fetch",
+            "JS",
+            "CSS"
+        ],
+        correct: ["XHR", "Fetch"]
+    }
     // Добавьте больше вопросов здесь
 ];
 
@@ -2044,7 +2217,7 @@ function loadRandomQuestion() {
     question.answers.forEach(answer => {
         answersContainer.innerHTML += `
             <label class="answer-item">
-                <input type="${inputType}" name="question" value="${answer}">
+                <input type="${inputType}" name=question value="${answer}">
                 <span>${answer}</span>
             </label>`;
     });
@@ -2060,7 +2233,7 @@ function loadRandomQuestion() {
 
 // Функция для проверки ответа
 function checkAnswer() {
-    const selected = [...document.querySelectorAll('input[name="question"]:checked')].map(input => input.value);
+    const selected = [...document.querySelectorAll('input[name=question]:checked')].map(input => input.value);
     const question = questions.find(q => q.question === document.getElementById('game-question-container').textContent.trim());
     const isCorrect = selected.length === question.correct.length && selected.every(answer => question.correct.includes(answer));
 

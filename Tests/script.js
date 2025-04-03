@@ -62,9 +62,11 @@ function checkAnswers() {
         }
 
         const feedbackDiv = document.getElementById(`feedback${qIndex}`);
+        const commentHtml = q.comment ? `<br><span class="comment">Комментарий: ${q.comment}</span>` : '';
+        
         feedbackDiv.innerHTML = isCorrect 
-            ? `<span class="correct-answer">Ваш ответ правильный!</span>` 
-            : `<span class="incorrect-answer">Правильный ответ: ${q.correct.join(', ')}</span>`;
+            ? `<span class="correct-answer">Ваш ответ правильный!</span>${commentHtml}` 
+            : `<span class="incorrect-answer">Правильный ответ: ${q.correct.join(', ')}</span>${commentHtml}`;
     });
 
     const resultList = document.getElementById('resultList');
@@ -87,9 +89,7 @@ function resetTest() {
     document.querySelector('.reset-btn').style.display = 'none';
 }
 
-
 // Блок добавления иконки
-
 function addFaviconsAndMeta() {
     const head = document.head;
 

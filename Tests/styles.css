@@ -57,6 +57,7 @@
     }
     .correct-answer { color: green; font-weight: bold; }
     .incorrect-answer { color: red; font-weight: bold; }
+    .comment {color:#007bff; font-weight: bold; }
     .feedback { margin-top: 10px; }
     #results ul { list-style-type: none; padding: 0; }
     #results li { margin-bottom: 20px; border: 1px solid #ccc; padding: 10px; }

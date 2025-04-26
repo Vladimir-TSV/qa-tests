@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Linux консоль, Git bush</title>
+<link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
+
+</head>
+<body>
+<div class="fixed-top" id="fixedTop">
+    <button class="check-btn" onclick="checkAnswers()" style="display: none;">Проверить</button>
+    <button class="reset-btn" onclick="resetTest()" style="display: none;">Начать заново</button>
+    <a href="../index.html" class="return-button">Вернуться на главную</a>
+</div>
+
+<div id="startContainer">
+    <h1>Linux консоль, Git bush</h1>
+    <button class="start-btn" onclick="startTest()">Начать тест</button>
+</div>
+
+<div id="testContainer">
+</div>
+
+<div id="results">
+    <h3>Результаты:</h3>
+    <ul id="resultList"></ul>
+</div>
+
+<script>
+const questions = [
+{
+      "question": "Как посмотреть содержимое текущей директории?",
+      "answers": [
+        "dir",
+        "ls",
+        "show",
+        "list"
+      ],
+      "correct": ["ls"],
+      "comment": "Команда ls (list) показывает содержимое текущей директории. Полезные флаги: -l (подробно), -a (скрытые файлы)"
+    },
+    {
+      "question": "Как сменить текущую директорию?",
+      "answers": [
+        "cd",
+        "chdir",
+        "move",
+        "goto"
+      ],
+      "correct": ["cd"],
+      "comment": "cd (change directory) - для навигации. cd ~ - в домашнюю, cd .. - на уровень выше"
+    },
+    {
+      "question": "Как создать новый файл?",
+      "answers": [
+        "mkfile",
+        "touch",
+        "new",
+        "create"
+      ],
+      "correct": ["touch"],
+      "comment": "touch filename создает пустой файл или обновляет время его модификации"
+    },
+    {
+      "question": "Как создать директорию?",
+      "answers": [
+        "mkdir",
+        "makedir",
+        "newdir",
+        "create dir"
+      ],
+      "correct": ["mkdir"],
+      "comment": "mkdir dirname создает новую директорию. Флаг -p позволяет создавать вложенные пути"
+    },
+    {
+      "question": "Как скопировать файл?",
+      "answers": [
+        "copy",
+        "cp",
+        "clone",
+        "dup"
+      ],
+      "correct": ["cp"],
+      "comment": "cp source target копирует файл. Для рекурсивного копирования директорий: cp -r"
+    },
+    {
+      "question": "Как переместить или переименовать файл?",
+      "answers": [
+        "mv",
+        "move",
+        "rename",
+        "change"
+      ],
+      "correct": ["mv"],
+      "comment": "mv oldname newname переименовывает, mv file dir/ перемещает файл"
+    },
+    {
+      "question": "Как удалить файл?",
+      "answers": [
+        "del",
+        "rm",
+        "erase",
+        "remove"
+      ],
+      "correct": ["rm"],
+      "comment": "rm filename удаляет файл. Осторожно: восстановление сложно! Для директорий: rm -r"
+    },
+    {
+      "question": "Как просмотреть содержимое файла?",
+      "answers": [
+        "view",
+        "cat",
+        "show",
+        "open"
+      ],
+      "correct": ["cat"],
+      "comment": "cat filename выводит содержимое файла. less/more - для постраничного просмотра"
+    },
+    {
+      "question": "Как найти файл по имени?",
+      "answers": [
+        "search",
+        "find",
+        "locate",
+        "where"
+      ],
+      "correct": ["find", "locate"],
+      "comment": "find /path -name \"pattern\" ищет рекурсивно. locate быстрее, но использует базу данных"
+    },
+    {
+      "question": "Как искать текст в файлах?",
+      "answers": [
+        "grep",
+        "search",
+        "findstr",
+        "textfind"
+      ],
+      "correct": ["grep"],
+      "comment": "grep \"pattern\" file ищет текст. Полезные флаги: -i (регистр), -r (рекурсивно)"
+    },
+    {
+      "question": "Как узнать текущую директорию?",
+      "answers": [
+        "curdir",
+        "pwd",
+        "where",
+        "path"
+      ],
+      "correct": ["pwd"],
+      "comment": "pwd (print working directory) показывает полный путь текущей директории"
+    },
+    {
+      "question": "Как посмотреть историю команд?",
+      "answers": [
+        "history",
+        "log",
+        "hist",
+        "prev"
+      ],
+      "correct": ["history"],
+      "comment": "history показывает список выполненных команд. !n выполняет команду под номером n"
+    },
+    {
+      "question": "Как получить информацию о команде?",
+      "answers": [
+        "info",
+        "man",
+        "help",
+        "doc"
+      ],
+      "correct": ["man", "help"],
+      "comment": "man command показывает руководство, command --help - краткую справку"
+    },
+    {
+      "question": "Как изменить права доступа к файлу?",
+      "answers": [
+        "chmod",
+        "setperm",
+        "perm",
+        "access"
+      ],
+      "correct": ["chmod"],
+      "comment": "chmod permissions filename изменяет права (например, chmod 755 file)"
+    },
+    {
+      "question": "Как посмотреть запущенные процессы?",
+      "answers": [
+        "ps",
+        "process",
+        "top",
+        "listproc"
+      ],
+      "correct": ["ps", "top"],
+      "comment": "ps aux показывает процессы, top - интерактивный монитор процессов"
+    },
+    {
+      "question": "Как завершить процесс?",
+      "answers": [
+        "stop",
+        "kill",
+        "end",
+        "terminate"
+      ],
+      "correct": ["kill"],
+      "comment": "kill -9 PID принудительно завершает процесс. PID можно найти через ps"
+    },
+    {
+      "question": "Как скачать файл из интернета?",
+      "answers": [
+        "download",
+        "wget",
+        "curl",
+        "get"
+      ],
+      "correct": ["wget", "curl"],
+      "comment": "wget URL и curl -O URL скачивают файлы. curl мощнее для работы с API"
+    },
+    {
+      "question": "Как распаковать tar.gz архив?",
+      "answers": [
+        "tar -xzf",
+        "unzip",
+        "unpack",
+        "extract"
+      ],
+      "correct": ["tar -xzf"],
+      "comment": "tar -xzf archive.tar.gz распаковывает. -x - извлечь, -z - gzip, -f - файл"
+    },
+    {
+      "question": "Как проверить доступность сети?",
+      "answers": [
+        "ping",
+        "testnet",
+        "check",
+        "netstat"
+      ],
+      "correct": ["ping"],
+      "comment": "ping host проверяет соединение с хостом. Ctrl+C для остановки"
+    },
+    {
+      "question": "Как посмотреть занятое место на диске?",
+      "answers": [
+        "df",
+        "diskfree",
+        "du",
+        "diskspace"
+      ],
+      "correct": ["df", "du"],
+      "comment": "df -h показывает свободное место на дисках, du -h - размер директорий"
+    },
+    {
+      "question": "Как перенаправить вывод команды в файл?",
+      "answers": [
+        ">",
+        ">>",
+        "write",
+        "save"
+      ],
+      "correct": [">", ">>"],
+      "comment": "> перезаписывает файл, >> добавляет в конец. Например: ls > files.txt"
+    },
+    {
+      "question": "Как соединить команды конвейером (pipeline)?",
+      "answers": [
+        "|",
+        ">",
+        "&",
+        "||"
+      ],
+      "correct": ["|"],
+      "comment": "command1 | command2 передает вывод первой команды на вход второй. Пример: ps aux | grep python"
+    },
+    {
+      "question": "Как выполнить команду с правами суперпользователя?",
+      "answers": [
+        "admin",
+        "root",
+        "sudo",
+        "su"
+      ],
+      "correct": ["sudo"],
+      "comment": "sudo command выполняет команду с повышенными правами (если пользователь в sudoers)"
+    },
+    {
+      "question": "Как редактировать файл в консоли?",
+      "answers": [
+        "nano",
+        "vim",
+        "edit",
+        "textedit"
+      ],
+      "correct": ["nano", "vim"],
+      "comment": "nano проще для новичков, vim мощнее но сложнее. Для выхода из vim: ESC :q!"
+    },
+    {
+      "question": "Как сравнить два файла?",
+      "answers": [
+        "diff",
+        "compare",
+        "comp",
+        "vdiff"
+      ],
+      "correct": ["diff"],
+      "comment": "diff file1 file2 показывает различия. Для цветного вывода: diff --color"
+    },
+    {
+      "question": "Как создать символическую ссылку?",
+      "answers": [
+        "ln -s",
+        "link",
+        "symlink",
+        "mklink"
+      ],
+      "correct": ["ln -s"],
+      "comment": "ln -s target linkname создает ссылку (как ярлык в Windows)"
+    },
+    {
+      "question": "Как проверить свободную оперативную память?",
+      "answers": [
+        "meminfo",
+        "free",
+        "mem",
+        "ram"
+      ],
+      "correct": ["free"],
+      "comment": "free -h показывает информацию о памяти в удобном формате"
+    },
+    {
+      "question": "Как посмотреть переменные окружения?",
+      "answers": [
+        "env",
+        "set",
+        "vars",
+        "environ"
+      ],
+      "correct": ["env", "set"],
+      "comment": "env показывает все переменные, echo $VAR - конкретную переменную"
+    }
+];
+
+</script>
+</body>
+</html>

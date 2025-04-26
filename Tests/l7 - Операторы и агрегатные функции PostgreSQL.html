@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Операторы и агрегатные функции PostgreSQL</title>
+<link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
+
+</head>
+<body>
+<div class="fixed-top" id="fixedTop">
+    <button class="check-btn" onclick="checkAnswers()" style="display: none;">Проверить</button>
+    <button class="reset-btn" onclick="resetTest()" style="display: none;">Начать заново</button>
+    <a href="../index.html" class="return-button">Вернуться на главную</a>
+</div>
+
+<div id="startContainer">
+    <h1>Операторы и агрегатные функции PostgreSQL</h1>
+    <button class="start-btn" onclick="startTest()">Начать тест</button>
+</div>
+
+<div id="testContainer">
+</div>
+
+<div id="results">
+    <h3>Результаты:</h3>
+    <ul id="resultList"></ul>
+</div>
+
+<script>
+const questions = [
+{
+    "question": "Как выбрать все записи из таблицы 'users'?",
+    "answers": [
+        "GET * FROM users;",
+        "SELECT ALL FROM users;",
+        "SELECT * FROM users;",
+        "FIND * IN users;"
+    ],
+    "correct": ["SELECT * FROM users;"]
+    },
+    {
+    "question": "Как выбрать только столбцы 'name' и 'email' из таблицы 'users'?",
+    "answers": [
+            "SELECT name + email FROM users;",
+            "SELECT name, email FROM users;",
+            "SELECT name AND email FROM users;",
+            "SELECT COLUMNS(name, email) FROM users;"
+        ],
+    "correct": ["SELECT name, email FROM users;"]
+    },
+    {
+    "question": "Какой оператор используется для фильтрации записей по условию?",
+    "answers": [
+            "FILTER",
+            "WHERE",
+            "HAVING",
+            "CONDITION"
+        ],
+    "correct": ["WHERE"]
+    },
+    {
+    "question": "Как выбрать пользователей с возрастом больше 18 лет?",
+    "answers": [
+            "SELECT * FROM users WHERE age > 18;",
+            "SELECT * FROM users HAVING age > 18;",
+            "SELECT * FROM users IF age > 18;",
+            "SELECT * FROM users FILTER age > 18;"
+        ],
+    "correct": ["SELECT * FROM users WHERE age > 18;"]
+    },
+    {
+    "question": "Какая функция возвращает количество записей в выборке?",
+    "answers": [
+            "SUM()",
+            "TOTAL()",
+            "COUNT()",
+            "AMOUNT()"
+        ],
+    "correct": ["COUNT()"]
+    },
+    {
+    "question": "Как посчитать среднее значение столбца 'price' в таблице 'products'?",
+    "answers": [
+            "SELECT MEAN(price) FROM products;",
+            "SELECT AVG(price) FROM products;",
+            "SELECT AVERAGE(price) FROM products;",
+            "SELECT SUM(price)/COUNT(price) FROM products;"
+        ],
+    "correct": ["SELECT AVG(price) FROM products;"]
+    },
+    {
+    "question": "Как найти максимальное значение в столбце 'salary'?",
+    "answers": [
+            "SELECT PEAK(salary) FROM employees;",
+            "SELECT TOP(salary) FROM employees;",
+            "SELECT MAX(salary) FROM employees;",
+            "SELECT HIGHEST(salary) FROM employees;"
+        ],
+    "correct": ["SELECT MAX(salary) FROM employees;"]
+    },
+    {
+    "question": "Как сгруппировать данные по столбцу 'department'?",
+    "answers": [
+            "SELECT department FROM employees CATEGORIZE BY department;",
+            "SELECT department FROM employees GROUP BY department;",
+            "SELECT department FROM employees SORT BY department;",
+            "SELECT department FROM employees PARTITION BY department;"
+        ],
+    "correct": ["SELECT department FROM employees GROUP BY department;"]
+    },
+    {
+    "question": "Как отфильтровать группы после GROUP BY?",
+    "answers": [
+            "FILTER",
+            "WHERE",
+            "HAVING",
+            "CONDITION"
+        ],
+    "correct": ["HAVING"]
+    },
+    {
+    "question": "Как выбрать только уникальные значения столбца 'city'?",
+    "answers": [
+            "SELECT UNIQUE city FROM addresses;",
+            "SELECT DISTINCT city FROM addresses;",
+            "SELECT DIFFERENT city FROM addresses;",
+            "SELECT ONLY city FROM addresses;"
+        ],
+    "correct": ["SELECT DISTINCT city FROM addresses;"]
+    },
+    {
+    "question": "Как объединить две таблицы по общему столбцу 'user_id'?",
+    "answers": [
+            "SELECT * FROM users COMBINE orders ON users.id = orders.user_id;",
+            "SELECT * FROM users MERGE orders ON users.id = orders.user_id;",
+            "SELECT * FROM users JOIN orders ON users.id = orders.user_id;",
+            "SELECT * FROM users CONNECT orders ON users.id = orders.user_id;"
+        ],
+    "correct": ["SELECT * FROM users JOIN orders ON users.id = orders.user_id;"]
+    },
+    {
+    "question": "Какой оператор используется для проверки на NULL?",
+    "answers": [
+            "EQUALS NULL",
+            "IS NULL",
+            "= NULL",
+            "NULL CHECK"
+        ],
+    "correct": ["IS NULL"]
+    },
+    {
+    "question": "Как выбрать записи, где email заканчивается на '@gmail.com'?",
+    "answers": [
+            "SELECT * FROM users WHERE email LIKE '%@gmail.com';",
+            "SELECT * FROM users WHERE email ENDS WITH '@gmail.com';",
+            "SELECT * FROM users WHERE email = '*@gmail.com';",
+            "SELECT * FROM users WHERE email MATCHES '@gmail.com$';"
+        ],
+    "correct": ["SELECT * FROM users WHERE email LIKE '%@gmail.com';"]
+    },
+    {
+    "question": "Как выбрать записи, где значение находится в диапазоне от 10 до 20?",
+    "answers": [
+            "SELECT * FROM products WHERE value >= 10 AND value <= 20;",
+            "SELECT * FROM products WHERE value BETWEEN 10 AND 20;",
+            "SELECT * FROM products WHERE value IN RANGE(10,20);",
+            "Первый и второй варианты верны"
+        ],
+        "correct": ["Первый и второй варианты верны"]
+    },
+    {
+        "question": "Как посчитать сумму значений в столбце 'amount'?",
+        "answers": [
+            "SELECT TOTAL(amount) FROM transactions;",
+            "SELECT SUM(amount) FROM transactions;",
+            "SELECT ADD(amount) FROM transactions;",
+            "SELECT PLUS(amount) FROM transactions;"
+        ],
+        "correct": ["SELECT SUM(amount) FROM transactions;"]
+    },
+    {
+        "question": "Как выбрать первые 10 записей из таблицы?",
+        "answers": [
+            "SELECT * FROM logs TOP 10;",
+            "SELECT * FROM logs LIMIT 10;",
+            "SELECT * FROM logs FIRST 10;",
+            "SELECT * FROM logs ROWS 10;"
+        ],
+        "correct": ["SELECT * FROM logs LIMIT 10;"]
+    },
+    {
+        "question": "Как отсортировать записи по убыванию столбца 'created_at'?",
+        "answers": [
+            "SELECT * FROM events ORDER BY created_at DESC;",
+            "SELECT * FROM events SORT BY created_at DESC;",
+            "SELECT * FROM events ARRANGE BY created_at DESC;",
+            "SELECT * FROM events SORT DESC created_at;"
+        ],
+        "correct": ["SELECT * FROM events ORDER BY created_at DESC;"]
+    },
+    {
+        "question": "Как объединить результаты двух запросов с удалением дубликатов?",
+        "answers": [
+            "SELECT * FROM table1 UNION SELECT * FROM table2;",
+            "SELECT * FROM table1 UNION ALL SELECT * FROM table2;",
+            "SELECT * FROM table1 MERGE SELECT * FROM table2;",
+            "SELECT * FROM table1 COMBINE SELECT * FROM table2;"
+        ],
+        "correct": ["SELECT * FROM table1 UNION SELECT * FROM table2;"]
+    },
+    {
+        "question": "Как найти записи, где столбец 'status' имеет значения 'active' или 'pending'?",
+        "answers": [
+            "SELECT * FROM orders WHERE status = 'active' OR status = 'pending';",
+            "SELECT * FROM orders WHERE status IN ('active', 'pending');",
+            "SELECT * FROM orders WHERE status ANY ('active', 'pending');",
+            "Первый и второй варианты верны"
+        ],
+        "correct": ["Первый и второй варианты верны"]
+    },
+    {
+        "question": "Как посчитать количество уникальных user_id в таблице 'orders'?",
+        "answers": [
+            "SELECT COUNT(DISTINCT user_id) FROM orders;",
+            "SELECT UNIQUE COUNT(user_id) FROM orders;",
+            "SELECT COUNT(UNIQUE user_id) FROM orders;",
+            "SELECT DISTINCT COUNT(user_id) FROM orders;"
+        ],
+        "correct": ["SELECT COUNT(DISTINCT user_id) FROM orders;"]
+    },
+    {
+        "question": "Как заменить NULL значения на 0 в результатах запроса?",
+        "answers": [
+            "SELECT COALESCE(column, 0) FROM table;",
+            "SELECT NULLIF(column, 0) FROM table;",
+            "SELECT IFNULL(column, 0) FROM table;",
+            "SELECT NVL(column, 0) FROM table;"
+        ],
+        "correct": ["SELECT COALESCE(column, 0) FROM table;"]
+    },
+    {
+        "question": "Как выбрать записи, созданные за последние 7 дней?",
+        "answers": [
+            "SELECT * FROM events WHERE created_at >= NOW() - INTERVAL '7 days';",
+            "SELECT * FROM events WHERE created_at > CURRENT_DATE - 7;",
+            "SELECT * FROM events WHERE created_at BETWEEN NOW() AND NOW() - 7 DAYS;",
+            "Первый и второй варианты верны"
+        ],
+        "correct": ["Первый и второй варианты верны"]
+    },
+    {
+        "question": "Как преобразовать текст в верхний регистр?",
+        "answers": [
+            "SELECT UPPER(name) FROM users;",
+            "SELECT UCASE(name) FROM users;",
+            "SELECT TO_UPPER(name) FROM users;",
+            "SELECT CAPITALIZE(name) FROM users;"
+        ],
+        "correct": ["SELECT UPPER(name) FROM users;"]
+    },
+    {
+        "question": "Как извлечь год из даты?",
+        "answers": [
+            "SELECT GET_YEAR(created_at) FROM events;",
+            "SELECT YEAR(created_at) FROM events;",
+            "SELECT EXTRACT(YEAR FROM created_at) FROM events;",
+            "SELECT DATE_PART('year', created_at) FROM events;"
+        ],
+        "correct": ["SELECT EXTRACT(YEAR FROM created_at) FROM events;", "SELECT DATE_PART('year', created_at) FROM events;"]
+    }
+];
+
+</script>
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>GIT</title>
+<link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
+
+</head>
+<body>
+<div class="fixed-top" id="fixedTop">
+    <button class="check-btn" onclick="checkAnswers()" style="display: none;">Проверить</button>
+    <button class="reset-btn" onclick="resetTest()" style="display: none;">Начать заново</button>
+    <a href="../index.html" class="return-button">Вернуться на главную</a>
+</div>
+
+<div id="startContainer">
+    <h1>GIT</h1>
+    <button class="start-btn" onclick="startTest()">Начать тест</button>
+</div>
+
+<div id="testContainer">
+</div>
+
+<div id="results">
+    <h3>Результаты:</h3>
+    <ul id="resultList"></ul>
+</div>
+
+<script>
+const questions = [
+{
+      "question": "Что такое Git?",
+      "answers": [
+        "Язык программирования",
+        "Система контроля версий",
+        "Операционная система",
+        "База данных"
+      ],
+      "correct": ["Система контроля версий"],
+      "comment": "Git - распределенная система контроля версий, созданная Линусом Торвальдсом для управления исходным кодом"
+    },
+    {
+      "question": "Какая основная задача Git?",
+      "answers": [
+        "Хранение истории изменений кода",
+        "Компиляция программ",
+        "Развертывание приложений",
+        "Тестирование кода"
+      ],
+      "correct": ["Хранение истории изменений кода"],
+      "comment": "Git позволяет отслеживать изменения в коде, возвращаться к предыдущим версиям и работать в команде"
+    },
+    {
+      "question": "Что такое коммит (commit) в Git?",
+      "answers": [
+        "Файл с исходным кодом",
+        "Отправка кода на сервер",
+        "Фиксация изменений в локальном репозитории",
+        "Запрос на слияние изменений"
+      ],
+      "correct": ["Фиксация изменений в локальном репозитории"],
+      "comment": "Коммит - это snapshot (снимок) изменений с уникальным хешем, автором и комментарием"
+    },
+    {
+      "question": "Какой командой инициализируется новый Git-репозиторий?",
+      "answers": [
+        "git start",
+        "git init",
+        "git create",
+        "git new"
+      ],
+      "correct": ["git init"],
+      "comment": "Команда git init создает скрытую папку .git с структурой для хранения версий"
+    },
+    {
+      "question": "Что такое GitHub?",
+      "answers": [
+        "Локальная система контроля версий",
+        "Облачная платформа для хостинга Git-репозиториев",
+        "Альтернатива Git",
+        "Система непрерывной интеграции"
+      ],
+      "correct": ["Облачная платформа для хостинга Git-репозиториев"],
+      "comment": "GitHub - популярный веб-сервис для совместной работы над кодом с дополнительными функциями (Issues, Pull Requests)"
+    },
+    {
+      "question": "Что такое GitLab?",
+      "answers": [
+        "Аналог GitHub с возможностью самолизации",
+        "Только облачный хостинг для Git",
+        "Графический клиент для Git",
+        "Язык разметки для Git"
+      ],
+      "correct": ["Аналог GitHub с возможностью самолизации"],
+      "comment": "GitLab - альтернатива GitHub с открытым исходным кодом и возможностью самостоятельного развертывания"
+    },
+    {
+      "question": "Какой командой добавляют изменения в индекс (staging area)?",
+      "answers": [
+        "git add",
+        "git stage",
+        "git commit",
+        "git push"
+      ],
+      "correct": ["git add"],
+      "comment": "git add добавляет изменения файлов в индекс перед коммитом"
+    },
+    {
+      "question": "Как создать новую ветку в Git?",
+      "answers": [
+        "git branch <имя_ветки>",
+        "git create <имя_ветки>",
+        "git new <имя_ветки>",
+        "git checkout -c <имя_ветки>"
+      ],
+      "correct": ["git branch <имя_ветки>"],
+      "comment": "git branch создает ветку, git checkout -b создает и сразу переключает"
+    },
+    {
+      "question": "Что делает команда git pull?",
+      "answers": [
+        "Отправляет изменения на сервер",
+        "Забирает изменения с сервера и сливает с текущей веткой",
+        "Удаляет последний коммит",
+        "Показывает историю коммитов"
+      ],
+      "correct": ["Забирает изменения с сервера и сливает с текущей веткой"],
+      "comment": "git pull = git fetch + git merge"
+    },
+    {
+      "question": "Как отправить изменения в удаленный репозиторий?",
+      "answers": [
+        "git send",
+        "git upload",
+        "git push",
+        "git commit --push"
+      ],
+      "correct": ["git push"],
+      "comment": "git push отправляет локальные коммиты в удаленный репозиторий"
+    },
+    {
+      "question": "Что такое Pull Request (Merge Request)?",
+      "answers": [
+        "Запрос на удаление ветки",
+        "Запрос на слияние изменений между ветками",
+        "Запрос на скачивание кода",
+        "Запрос на создание репозитория"
+      ],
+      "correct": ["Запрос на слияние изменений между ветками"],
+      "comment": "PR/MR - механизм в GitHub/GitLab для проверки и обсуждения изменений перед слиянием"
+    },
+    {
+      "question": "Как посмотреть историю коммитов?",
+      "answers": [
+        "git history",
+        "git log",
+        "git show",
+        "git list"
+      ],
+      "correct": ["git log"],
+      "comment": "git log показывает историю с хешами, авторами, датами и сообщениями коммитов"
+    },
+    {
+      "question": "Как отменить изменения в конкретном файле?",
+      "answers": [
+        "git reset <файл>",
+        "git checkout -- <файл>",
+        "git undo <файл>",
+        "git revert <файл>"
+      ],
+      "correct": ["git checkout -- <файл>"],
+      "comment": "git checkout -- <файл> отменяет незакоммиченные изменения в файле"
+    },
+    {
+      "question": "Что такое .gitignore?",
+      "answers": [
+        "Файл с настройками Git",
+        "Файл для игнорирования определенных файлов и папок",
+        "Файл с историей коммитов",
+        "Файл с паролями"
+      ],
+      "correct": ["Файл для игнорирования определенных файлов и папок"],
+      "comment": ".gitignore позволяет исключать из контроля версий временные файлы, бинарники и т.д."
+    },
+    {
+      "question": "Какой командой можно посмотреть различия между коммитами?",
+      "answers": [
+        "git diff",
+        "git compare",
+        "git changes",
+        "git show-diff"
+      ],
+      "correct": ["git diff"],
+      "comment": "git diff показывает изменения между коммитами, ветками или рабочим деревом и индексом"
+    },
+    {
+      "question": "Как клонировать удаленный репозиторий?",
+      "answers": [
+        "git copy <url>",
+        "git clone <url>",
+        "git download <url>",
+        "git get <url>"
+      ],
+      "correct": ["git clone <url>"],
+      "comment": "git clone создает локальную копию со всей историей и настройками удаленного репозитория"
+    },
+    {
+      "question": "Что такое fork в GitHub/GitLab?",
+      "answers": [
+        "Удаление репозитория",
+        "Полная копия чужого репозитория в ваш аккаунт",
+        "Слияние веток",
+        "Создание ветки"
+      ],
+      "correct": ["Полная копия чужого репозитория в ваш аккаунт"],
+      "comment": "Fork позволяет свободно экспериментировать с чужым проектом, сохраняя связь с оригиналом"
+    },
+    {
+      "question": "Как временно сохранить незавершенные изменения?",
+      "answers": [
+        "git hold",
+        "git save",
+        "git stash",
+        "git pause"
+      ],
+      "correct": ["git stash"],
+      "comment": "git stash временно сохраняет изменения в стеке, чтобы можно было переключиться на другую ветку"
+    },
+    {
+      "question": "Какой workflow (поток работы) часто используют с GitHub/GitLab?",
+      "answers": [
+        "Git Flow",
+        "GitHub Flow",
+        "GitLab Flow",
+        "Все варианты верны"
+      ],
+      "correct": ["Все варианты верны"],
+      "comment": "Существует несколько популярных workflow, выбираемых в зависимости от проекта"
+    },
+    {
+      "question": "Что такое CI/CD в контексте GitLab/GitHub?",
+      "answers": [
+        "Система контроля версий",
+        "Инструмент для создания репозиториев",
+        "Практика автоматизации сборки, тестирования и развертывания",
+        "Язык программирования"
+      ],
+      "correct": ["Практика автоматизации сборки, тестирования и развертывания"],
+      "comment": "CI/CD (Continuous Integration/Continuous Delivery) - ключевая функция GitLab/GitHub для DevOps"
+    },
+    {
+      "question": "Как просмотреть список удаленных репозиториев?",
+      "answers": [
+        "git remote -v",
+        "git list remotes",
+        "git show remotes",
+        "git get urls"
+      ],
+      "correct": ["git remote -v"],
+      "comment": "git remote -v показывает список удаленных репозиториев и их URL"
+    },
+    {
+      "question": "Как интегрировать изменения из одной ветки в другую?",
+      "answers": [
+        "git integrate",
+        "git merge",
+        "git combine",
+        "git join"
+      ],
+      "correct": ["git merge"],
+      "comment": "git merge объединяет изменения из указанной ветки в текущую"
+    },
+    {
+      "question": "Как переименовать последний коммит?",
+      "answers": [
+        "git rename commit",
+        "git commit --amend",
+        "git change commit",
+        "git fix commit"
+      ],
+      "correct": ["git commit --amend"],
+      "comment": "git commit --amend позволяет изменить последний коммит (сообщение или содержимое)"
+    },
+    {
+      "question": "Что такое rebase в Git?",
+      "answers": [
+        "Перезапись истории коммитов",
+        "Удаление ветки",
+        "Создание резервной копии",
+        "Сжатие репозитория"
+      ],
+      "correct": ["Перезапись истории коммитов"],
+      "comment": "rebase перемещает или объединяет последовательность коммитов в новый базовый коммит"
+    },
+    {
+      "question": "Как просмотреть изменения перед коммитом?",
+      "answers": [
+        "git status",
+        "git diff --staged",
+        "git preview",
+        "Варианты 1 и 2 верны"
+      ],
+      "correct": ["Варианты 1 и 2 верны"],
+      "comment": "git status показывает общую информацию, git diff --staged - конкретные изменения в staged файлах"
+    }
+];
+
+</script>
+</body>
+</html>

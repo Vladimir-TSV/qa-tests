@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>HTML, CSS, JS</title>
+<link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
+
+</head>
+<body>
+<div class="fixed-top" id="fixedTop">
+    <button class="check-btn" onclick="checkAnswers()" style="display: none;">Проверить</button>
+    <button class="reset-btn" onclick="resetTest()" style="display: none;">Начать заново</button>
+    <a href="../index.html" class="return-button">Вернуться на главную</a>
+</div>
+
+<div id="startContainer">
+    <h1>HTML, CSS, JS</h1>
+    <button class="start-btn" onclick="startTest()">Начать тест</button>
+</div>
+
+<div id="testContainer">
+</div>
+
+<div id="results">
+    <h3>Результаты:</h3>
+    <ul id="resultList"></ul>
+</div>
+
+<script>
+const questions = [
+    {
+      "question": "Какой тег используется для создания гиперссылки?",
+      "answers": [
+        "link",
+        "a",
+        "href",
+        "url"
+      ],
+      "correct": ["a"],
+      "comment": "Тег a с атрибутом href создает гиперссылки, link используется для подключения ресурсов"
+    },
+    {
+      "question": "Какой атрибут обязателен для тега img?",
+      "answers": [
+        "src",
+        "alt",
+        "title",
+        "href"
+      ],
+      "correct": ["src"],
+      "comment": "Атрибут src обязателен для отображения изображения, alt важен для доступности"
+    },
+    {
+      "question": "Какой тег используется для создания упорядоченного списка?",
+      "answers": [
+        "ul",
+        "ol",
+        "li",
+        "list"
+      ],
+      "correct": ["ol"],
+      "comment": "ol - ordered list (нумерованный), ul - unordered list (маркированный)"
+    },
+    {
+      "question": "Какой тег определяет заголовок первого уровня?",
+      "answers": [
+        "h1",
+        "head",
+        "header",
+        "heading"
+      ],
+      "correct": ["h1"],
+      "comment": "Теги заголовков от h1 (наивысший) до h6 (низший)"
+    },
+    {
+      "question": "Какой атрибут используется для уникальной идентификации элемента?",
+      "answers": [
+        "class",
+        "id",
+        "name",
+        "type"
+      ],
+      "correct": ["id"],
+      "comment": "id должен быть уникальным в рамках документа, class может повторяться"
+    },
+    {
+      "question": "Какой тег используется для создания таблицы?",
+      "answers": [
+        "table",
+        "tab",
+        "tr",
+        "grid"
+      ],
+      "correct": ["table"],
+      "comment": "Таблица создается тегами table, tr (строка), td (ячейка), th (заголовок)"
+    },
+    {
+      "question": "Какой тег используется для ввода данных пользователем?",
+      "answers": [
+        "input",
+        "text",
+        "form",
+        "data"
+      ],
+      "correct": ["input"],
+      "comment": "input с разными type (text, password и др.) - основной элемент форм"
+    },
+    {
+      "question": "Какой тип input используется для скрытых полей?",
+      "answers": [
+        "text",
+        "password",
+        "hidden",
+        "secret"
+      ],
+      "correct": ["hidden"],
+      "comment": "type='hidden' создает невидимое поле для передачи служебных данных"
+    },
+    {
+      "question": "Какой тег используется для группировки элементов формы?",
+      "answers": [
+        "div",
+        "section",
+        "fieldset",
+        "group"
+      ],
+      "correct": ["fieldset"],
+      "comment": "fieldset группирует элементы формы, часто с legend для заголовка"
+    },
+    {
+      "question": "Какой атрибут указывает на обязательность заполнения поля?",
+      "answers": [
+        "required",
+        "mandatory",
+        "important",
+        "must"
+      ],
+      "correct": ["required"],
+      "comment": "Атрибут required обеспечивает валидацию на клиенте перед отправкой формы"
+    },
+    {
+      "question": "Какой тег используется для создания выпадающего списка?",
+      "answers": [
+        "list",
+        "dropdown",
+        "select",
+        "option"
+      ],
+      "correct": ["select "],
+      "comment": "select создает выпадающий список с option для вариантов выбора"
+    },
+    {
+      "question": "Какой тег определяет ячейку таблицы?",
+      "answers": [
+        "cell",
+        "td",
+        "tr",
+        "item"
+      ],
+      "correct": ["td"],
+      "comment": "td - table data (ячейка данных), th - ячейка заголовка"
+    },
+    {
+      "question": "Какой тег используется для вставки JavaScript?",
+      "answers": [
+        "javascript",
+        "js",
+        "script",
+        "code"
+      ],
+      "correct": ["script"],
+      "comment": "Тег script может содержать код или ссылку через src на внешний файл"
+    },
+    {
+      "question": "Какой тег используется для подключения CSS?",
+      "answers": [
+        "style",
+        "css",
+        "link",
+        "stylesheet"
+      ],
+      "correct": ["link", "style"],
+      "comment": "link для внешних стилей (rel='stylesheet'), style для встроенных"
+    },
+    {
+      "question": "Какой атрибут тега <form> определяет метод отправки данных?",
+      "answers": [
+        "action",
+        "method",
+        "type",
+        "send"
+      ],
+      "correct": ["method"],
+      "comment": "method='get' (по умолчанию) или method='post' для разных способов отправки"
+    },
+    {
+      "question": "Какой тег используется для создания кнопки?",
+      "answers": [
+        "button",
+        "input type='button'",
+        "a",
+        "Все варианты верны"
+      ],
+      "correct": ["Все варианты верны"],
+      "comment": "Кнопки можно создавать разными способами с различной семантикой"
+    },
+    {
+      "question": "Какой тег определяет заголовок документа?",
+      "answers": [
+        "h1",
+        "head",
+        "header",
+        "title"
+      ],
+      "correct": ["head"],
+      "comment": "head содержит метаинформацию, title - заголовок окна/вкладки"
+    },
+    {
+      "question": "Какой атрибут тега <meta> используется для указания кодировки?",
+      "answers": [
+        "encoding",
+        "charset",
+        "type",
+        "content"
+      ],
+      "correct": ["charset"],
+      "comment": "meta charset='UTF-8' - стандартная кодировка для современных сайтов"
+    },
+    {
+      "question": "Какой тег используется для создания строки в таблице?",
+      "answers": [
+        "tr",
+        "td",
+        "row",
+        "th"
+      ],
+      "correct": ["tr"],
+      "comment": "tr - table row (строка таблицы), содержит td или th"
+    },
+    {
+      "question": "Какой тег используется для создания заголовка столбца таблицы?",
+      "answers": [
+        "td",
+        "th",
+        "header",
+        "col"
+      ],
+      "correct": ["th"],
+      "comment": "th - table heading (заголовок), по умолчанию выделяется жирным"
+    },
+    {
+      "question": "Какой атрибут тега <a> открывает ссылку в новой вкладке?",
+      "answers": [
+        "target='_blank'",
+        "new='tab'",
+        "open='new'",
+        "window='new'"
+      ],
+      "correct": ["target='_blank'"],
+      "comment": "target='_blank' открывает в новой вкладке, рекомендуется добавлять rel='noopener'"
+    },
+    {
+      "question": "Какой тег используется для создания области ввода многострочного текста?",
+      "answers": [
+        "input type='text'",
+        "textarea",
+        "text",
+        "multiline"
+      ],
+      "correct": ["textarea"],
+      "comment": "textarea создает многострочное поле ввода с атрибутами rows и cols"
+    },
+    {
+      "question": "Какой тег используется для семантического выделения основного содержимого страницы?",
+      "answers": [
+        "div",
+        "main",
+        "content",
+        "body"
+      ],
+      "correct": ["main"],
+      "comment": "main - семантический тег HTML5 для основного контента (должен быть один на странице)"
+    },
+    {
+      "question": "Какой тег используется для создания подвала страницы?",
+      "answers": [
+        "bottom",
+        "footer",
+        "end",
+        "foot"
+      ],
+      "correct": ["footer"],
+      "comment": "footer - семантический тег HTML5 для подвала страницы или раздела"
+    },
+    {
+      "question": "Что такое HTML?",
+      "answers": [
+        "Язык программирования для создания веб-сайтов",
+        "Язык разметки для структурирования веб-страниц",
+        "База данных для хранения контента",
+        "Графический редактор"
+      ],
+      "correct": ["Язык разметки для структурирования веб-страниц"],
+      "comment": "HTML (HyperText Markup Language) определяет структуру, а не поведение или внешний вид"
+    },
+    {
+      "question": "Какова основная функция CSS?",
+      "answers": [
+        "Создание структуры страницы",
+        "Добавление интерактивности",
+        "Стилизация и оформление HTML-элементов",
+        "Работа с сервером"
+      ],
+      "correct": ["Стилизация и оформление HTML-элементов"],
+      "comment": "CSS (Cascading Style Sheets) управляет визуальным представлением документа"
+    },
+    {
+      "question": "Для чего используется JavaScript?",
+      "answers": [
+        "Для описания структуры страницы",
+        "Для стилизации элементов",
+        "Для добавления интерактивности и динамики",
+        "Для хранения данных"
+      ],
+      "correct": ["Для добавления интерактивности и динамики"],
+      "comment": "JavaScript делает страницы интерактивными через манипуляции с DOM"
+    },
+    {
+      "question": "В каком порядке браузер обрабатывает HTML, CSS и JavaScript?",
+      "answers": [
+        "CSS → HTML → JavaScript",
+        "HTML → CSS → JavaScript",
+        "JavaScript → HTML → CSS",
+        "Все одновременно"
+      ],
+      "correct": ["HTML → CSS → JavaScript"],
+      "comment": "Браузер парсит HTML, строит DOM, применяет CSS, затем выполняет JS"
+    },
+    {
+      "question": "Как CSS связывается с HTML?",
+      "answers": [
+        "Через тег script",
+        "Через тег style или атрибут style",
+        "Через тег link для внешних файлов",
+        "Варианты 2 и 3 верны"
+      ],
+      "correct": ["Варианты 2 и 3 верны"],
+      "comment": "Стили можно подключать через link (внешние) или style (встроенные), либо инлайн через style"
+    },
+    {
+      "question": "Как JavaScript подключается к HTML?",
+      "answers": [
+        "Через тег css",
+        "Через тег script",
+        "Через атрибут js",
+        "Через тег javascript"
+      ],
+      "correct": ["Через тег script"],
+      "comment": "Тег script может содержать код непосредственно или ссылаться на внешний файл через src"
+    },
+    {
+      "question": "Что может переопределять CSS?",
+      "answers": [
+        "Только другой CSS с более высоким приоритетом",
+        "Инлайн-стили в HTML",
+        "JavaScript может изменять стили",
+        "Все варианты верны"
+      ],
+      "correct": ["Все варианты верны"],
+      "comment": "Стили могут переопределяться по каскаду, инлайн-стилями или через JS"
+    },
+    {
+      "question": "Какой порядок приоритета стилей CSS правильный?",
+      "answers": [
+        "Внешние стили → Внутренние стили → Инлайн-стили",
+        "Инлайн-стили → Внутренние стили → Внешние стили",
+        "Внутренние стили → Внешние стили → Инлайн-стили",
+        "Порядок не имеет значения"
+      ],
+      "correct": ["Инлайн-стили → Внутренние стили → Внешние стили"],
+      "comment": "Инлайн-стили (через атрибут style) имеют наивысший приоритет"
+    },
+    {
+      "question": "Может ли JavaScript изменять HTML-структуру страницы?",
+      "answers": [
+        "Нет, только CSS может это делать",
+        "Да, через DOM API",
+        "Только если использовать jQuery",
+        "Только при загрузке страницы"
+      ],
+      "correct": ["Да, через DOM API"],
+      "comment": "JavaScript может динамически изменять DOM через методы типа createElement, appendChild и др."
+    },
+    {
+      "question": "Как называется модель, которая связывает HTML, CSS и JavaScript?",
+      "answers": [
+        "DOM (Document Object Model)",
+        "BOM (Browser Object Model)",
+        "CSSOM (CSS Object Model)",
+        "Все варианты верны"
+      ],
+      "correct": ["DOM (Document Object Model)"],
+      "comment": "DOM представляет страницу как дерево объектов, с которым взаимодействуют CSS и JS"
+    },
+    {
+      "question": "Что происходит при конфликте стилей?",
+      "answers": [
+        "Браузер использует стили из последнего подключенного файла",
+        "Применяются стили с более высоким приоритетом",
+        "Браузер показывает ошибку",
+        "Варианты 1 и 2 верны"
+      ],
+      "correct": ["Варианты 1 и 2 верны"],
+      "comment": "При равной специфичности побеждает последний объявленный стиль"
+    },
+    {
+      "question": "Может ли CSS влиять на работу JavaScript?",
+      "answers": [
+        "Нет, это невозможно",
+        "Да, через CSS-переменные и псевдоклассы",
+        "Только если использовать препроцессоры",
+        "Только через анимации"
+      ],
+      "correct": ["Да, через CSS-переменные и псевдоклассы"],
+      "comment": "JS может читать CSS-переменные и реагировать на изменения классов"
+    },
+    {
+      "question": "Какой технологии не существует?",
+      "answers": [
+        "HTMLOM",
+        "CSSOM",
+        "DOM",
+        "BOM"
+      ],
+      "correct": ["HTMLOM"],
+      "comment": "CSSOM - CSS Object Model, DOM - Document Object Model, BOM - Browser Object Model"
+    },
+    {
+      "question": "Что из перечисленного является стандартом, а не технологией?",
+      "answers": [
+        "HTML5",
+        "CSS3",
+        "ECMAScript",
+        "Все варианты верны"
+      ],
+      "correct": ["Все варианты верны"],
+      "comment": "Все перечисленные являются стандартами, в отличие от React/jQuery и т.п."
+    },
+    {
+      "question": "Какие из этих утверждений о веб-технологиях верны?",
+      "answers": [
+        "HTML отвечает за структуру страницы",
+        "CSS используется для стилизации элементов",
+        "JavaScript выполняется на сервере",
+        "DOM создается на основе HTML-разметки"
+      ],
+      "correct": ["HTML отвечает за структуру страницы", "CSS используется для стилизации элементов", "DOM создается на основе HTML-разметки"],
+      "comment": "JavaScript выполняется в браузере (клиентская сторона), кроме Node.js"
+    },
+    {
+      "question": "Какие элементы HTML5 являются семантическими?",
+      "answers": [
+        "div",
+        "header",
+        "span",
+        "article",
+        "section"
+      ],
+      "correct": ["header", "article", "section"],
+      "comment": "Семантические теги четко описывают свое содержимое (div и span - нейтральные)"
+    },
+    {
+      "question": "Какие способы подключения CSS являются валидными?",
+      "answers": [
+        "Через атрибут style",
+        "Через тег link в head",
+        "Через директиву @import",
+        "Через JavaScript-вставку",
+        "Через тег <css"
+      ],
+      "correct": ["Через атрибут style", "Через тег link в head", "Через директиву @import", "Через JavaScript-вставку"],
+      "comment": "Тега css не существует в стандарте HTML"
+    },
+    {
+      "question": "Какие из этих JavaScript-методов работают с DOM?",
+      "answers": [
+        "document.getElementById()",
+        "element.style.setProperty()",
+        "window.alert()",
+        "element.classList.add()",
+        "console.log()"
+      ],
+      "correct": ["document.getElementById()", "element.style.setProperty()", "element.classList.add()"],
+      "comment": "window.alert() и console.log() не изменяют DOM"
+    },
+    {
+      "question": "Какие CSS-свойства влияют на блочную модель?",
+      "answers": [
+        "margin",
+        "color",
+        "padding",
+        "border",
+        "font-size"
+      ],
+      "correct": ["margin", "padding", "border"],
+      "comment": "Блочная модель состоит из content, padding, border и margin"
+    },
+    {
+      "question": "Какие из этих событий можно обрабатывать в JavaScript?",
+      "answers": [
+        "click",
+        "hover",
+        "focus",
+        "margin-change",
+        "DOMContentLoaded"
+      ],
+      "correct": ["click", "focus", "DOMContentLoaded"],
+      "comment": "hover - CSS-псевдокласс, margin-change - несуществующее событие"
+    },
+    {
+      "question": "Что из перечисленного относится к клиентским технологиям?",
+      "answers": [
+        "HTML",
+        "PHP",
+        "CSS",
+        "Node.js",
+        "React"
+      ],
+      "correct": ["HTML", "CSS", "React"],
+      "comment": "PHP и Node.js - серверные технологии"
+    },
+    {
+      "question": "Какие утверждения о Cookie и LocalStorage верны?",
+      "answers": [
+        "Cookie автоматически отправляются на сервер",
+        "LocalStorage доступен только через JavaScript",
+        "Cookie имеют меньший размер (до ~4KB)",
+        "LocalStorage сохраняет данные после закрытия браузера",
+        "Cookie можно защитить флагом HttpOnly"
+      ],
+      "correct": ["Cookie автоматически отправляются на сервер", "Cookie имеют меньший размер (до ~4KB)", "LocalStorage сохраняет данные после закрытия браузера", "Cookie можно защитить флагом HttpOnly"],
+      "comment": "LocalStorage доступен через DevTools, не только через JS"
+    },
+    {
+      "question": "Какие из этих селекторов CSS существуют?",
+      "answers": [
+        ".class",
+        "#id",
+        ">element",
+        ":hover",
+        "~neighbor"
+      ],
+      "correct": [".class", "#id", ":hover", "~neighbor"],
+      "comment": "Правильный синтаксис для дочернего селектора - parent > child"
+    },
+    {
+      "question": "Какие методы HTTP используются в REST API?",
+      "answers": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "COPY"
+      ],
+      "correct": ["GET", "POST", "PUT", "DELETE"],
+      "comment": "Основные методы REST: GET (чтение), POST (создание), PUT (обновление), DELETE (удаление)"
+    },
+    {
+      "question": "Как JavaScript может взаимодействовать с CSS?",
+      "answers": [
+        "Изменение классов через classList",
+        "Прямое изменение style-атрибутов",
+        "Использование CSS-переменных",
+        "Переопределение медиа-запросов"
+      ],
+      "correct": ["Изменение классов через classList", "Прямое изменение style-атрибутов", "Использование CSS-переменных"],
+      "comment": "Медиа-запросы нельзя изменить через JS напрямую"
+    },
+    {
+      "question": "Какие из этих тегов используются для работы с формами?",
+      "answers": [
+        "input",
+        "form",
+        "table",
+        "select",
+        "data"
+      ],
+      "correct": ["input", "form", "select"],
+      "comment": "table для таблиц, data - семантический тег для машинных данных"
+    },
+    {
+      "question": "Какие из этих технологий являются стандартами?",
+      "answers": [
+        "HTML5",
+        "React",
+        "CSS3",
+        "jQuery",
+        "ECMAScript"
+      ],
+      "correct": ["HTML5", "CSS3", "ECMAScript"],
+      "comment": "React и jQuery - библиотеки, построенные на стандартах"
+    },
+    {
+      "question": "Какие утверждения о media queries верны?",
+      "answers": [
+        "Позволяют адаптировать стили под разные устройства",
+        "Работают только в мобильных браузерах",
+        "Могут проверять ширину viewport",
+        "Используются только в JavaScript",
+        "Могут определять ориентацию устройства"
+      ],
+      "correct": ["Позволяют адаптировать стили под разные устройства", "Могут проверять ширину viewport", "Могут определять ориентацию устройства"],
+      "comment": "Media queries - часть CSS, работают во всех современных браузерах"
+    },
+    {
+      "question": "Какие из этих операторов JavaScript возвращают boolean?",
+      "answers": [
+        "===",
+        "typeof",
+        "instanceof",
+        "||",
+        "=>"
+      ],
+      "correct": ["===", "instanceof"],
+      "comment": "typeof возвращает строку, || возвращает значение операнда, => - синтаксис стрелочной функции"
+    }
+]
+
+</script>
+</body>
+</html>

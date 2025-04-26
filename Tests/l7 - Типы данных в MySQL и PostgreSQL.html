@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Типы данных в MySQL и PostgreSQL</title>
+<link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
+
+</head>
+<body>
+<div class="fixed-top" id="fixedTop">
+    <button class="check-btn" onclick="checkAnswers()" style="display: none;">Проверить</button>
+    <button class="reset-btn" onclick="resetTest()" style="display: none;">Начать заново</button>
+    <a href="../index.html" class="return-button">Вернуться на главную</a>
+</div>
+
+<div id="startContainer">
+    <h1>Типы данных в MySQL и PostgreSQL</h1>
+    <button class="start-btn" onclick="startTest()">Начать тест</button>
+</div>
+
+<div id="testContainer">
+</div>
+
+<div id="results">
+    <h3>Результаты:</h3>
+    <ul id="resultList"></ul>
+</div>
+
+<script>
+const questions = [
+{
+        "question": "Какой тип данных в MySQL используется для хранения целых чисел?",
+        "answers": [
+            "INT",
+            "STRING",
+            "FLOAT",
+            "BOOLEAN"
+        ],
+        "correct": ["INT"]
+    },
+    {
+        "question": "Какой тип данных следует использовать для хранения денежных значений в PostgreSQL?",
+        "answers": [
+            "FLOAT",
+            "DECIMAL",
+            "MONEY",
+            "INTEGER"
+        ],
+        "correct": ["DECIMAL", "MONEY"]
+    },
+    {
+        "question": "Какой тип данных в MySQL используется для хранения даты и времени?",
+        "answers": [
+            "DATETIME",
+            "TIMESTAMP",
+            "DATE",
+            "Все перечисленные"
+        ],
+        "correct": ["Все перечисленные"]
+    },
+    {
+        "question": "Какой тип данных PostgreSQL используется для хранения большого текста?",
+        "answers": [
+            "VARCHAR",
+            "TEXT",
+            "STRING",
+            "CHAR"
+        ],
+        "correct": ["TEXT"]
+    },
+    {
+        "question": "Какой тип данных MySQL лучше всего подходит для хранения логических значений (true/false)?",
+        "answers": [
+            "BOOLEAN",
+            "TINYINT(1)",
+            "BIT",
+            "ENUM('true','false')"
+        ],
+        "correct": ["BOOLEAN", "TINYINT(1)"]
+    },
+    {
+        "question": "Какой тип данных PostgreSQL используется для хранения JSON?",
+        "answers": [
+            "JSON",
+            "JSONB",
+            "TEXT",
+            "Все перечисленные"
+        ],
+        "correct": ["JSON", "JSONB"]
+    },
+    {
+        "question": "Какой максимальный размер VARCHAR в MySQL?",
+        "answers": [
+            "255 символов",
+            "65535 символов",
+            "16777215 символов",
+            "Зависит от версии MySQL"
+        ],
+        "correct": ["65535 символов"]
+    },
+    {
+        "question": "Какой тип данных PostgreSQL используется для хранения массива значений?",
+        "answers": [
+            "ARRAY",
+            "SET",
+            "LIST",
+            "COLLECTION"
+        ],
+        "correct": ["ARRAY"]
+    },
+    {
+        "question": "Какой тип данных MySQL используется для хранения бинарных данных?",
+        "answers": [
+            "BLOB",
+            "BINARY",
+            "VARBINARY",
+            "Все перечисленные"
+        ],
+        "correct": ["Все перечисленные"]
+    },
+    {
+        "question": "Какой тип данных PostgreSQL следует использовать для хранения географических координат?",
+        "answers": [
+            "POINT",
+            "GEOGRAPHY",
+            "GEOMETRY",
+            "COORDINATES"
+        ],
+        "correct": ["POINT", "GEOGRAPHY"]
+    },
+    {
+        "question": "Какой тип данных MySQL имеет более высокую точность для дробных чисел?",
+        "answers": [
+            "FLOAT",
+            "DOUBLE",
+            "DECIMAL",
+            "REAL"
+        ],
+        "correct": ["DECIMAL"]
+    },
+    {
+        "question": "Какой тип данных PostgreSQL используется для хранения UUID?",
+        "answers": [
+            "UUID",
+            "UNIQUEID",
+            "GUID",
+            "CHAR(36)"
+        ],
+        "correct": ["UUID"]
+    },
+    {
+        "question": "Какой тип данных MySQL используется для хранения перечисляемых значений?",
+        "answers": [
+            "SET",
+            "ENUM",
+            "CHOICE",
+            "LIST"
+        ],
+        "correct": ["ENUM"]
+    },
+    {
+        "question": "Какой тип данных PostgreSQL используется для хранения сетевых адресов?",
+        "answers": [
+            "INET",
+            "CIDR",
+            "IPADDRESS",
+            "Первые два варианта"
+        ],
+        "correct": ["Первые два варианта"]
+    },
+    {
+        "question": "Какой тип данных MySQL используется для хранения временных меток с часовым поясом?",
+        "answers": [
+            "TIMESTAMP",
+            "DATETIME",
+            "TIMEZONE",
+            "MySQL не поддерживает часовые пояса"
+        ],
+        "correct": ["TIMESTAMP"]
+    },
+    {
+        "question": "Какой тип данных PostgreSQL используется для хранения битовых масок?",
+        "answers": [
+            "BIT",
+            "BIT VARYING",
+            "BINARY",
+            "Первые два варианта"
+        ],
+        "correct": ["Первые два варианта"]
+    },
+    {
+        "question": "Какой тип данных MySQL занимает 1 байт?",
+        "answers": [
+            "TINYINT",
+            "SMALLINT",
+            "BOOLEAN",
+            "CHAR(1)"
+        ],
+        "correct": ["TINYINT", "BOOLEAN"]
+    },
+    {
+        "question": "Какой тип данных PostgreSQL используется для хранения XML?",
+        "answers": [
+            "XML",
+            "TEXT",
+            "DOCUMENT",
+            "MARKUP"
+        ],
+        "correct": ["XML"]
+    },
+    {
+        "question": "Какой тип данных MySQL используется для хранения временных интервалов?",
+        "answers": [
+            "INTERVAL",
+            "TIME",
+            "DURATION",
+            "MySQL не поддерживает интервалы"
+        ],
+        "correct": ["MySQL не поддерживает интервалы"]
+    },
+    {
+        "question": "Какой тип данных PostgreSQL используется для хранения составных типов?",
+        "answers": [
+            "COMPOSITE",
+            "OBJECT",
+            "RECORD",
+            "STRUCT"
+        ],
+        "correct": ["COMPOSITE"]
+    },
+    {
+        "question": "Какой тип данных MySQL используется для хранения больших текстовых данных?",
+        "answers": [
+            "TEXT",
+            "LONGTEXT",
+            "MEDIUMTEXT",
+            "Все перечисленные"
+        ],
+        "correct": ["Все перечисленные"]
+    },
+    {
+        "question": "Какой тип данных PostgreSQL используется для хранения диапазонов значений?",
+        "answers": [
+            "RANGE",
+            "INTERVAL",
+            "SPAN",
+            "BETWEEN"
+        ],
+        "correct": ["RANGE"]
+    },
+    {
+        "question": "Какой тип данных MySQL используется для хранения геопространственных данных?",
+        "answers": [
+            "GEOMETRY",
+            "GEOGRAPHY",
+            "SPATIAL",
+            "MySQL не поддерживает геопространственные данные"
+        ],
+        "correct": ["GEOMETRY"]
+    },
+    {
+        "question": "Какой тип данных PostgreSQL используется для хранения бинарных данных?",
+        "answers": [
+            "BYTEA",
+            "BLOB",
+            "BINARY",
+            "VARBINARY"
+        ],
+        "correct": ["BYTEA"]
+    },
+    {
+        "question": "Какой тип данных MySQL используется для хранения временного промежутка?",
+        "answers": [
+            "TIME",
+            "INTERVAL",
+            "DURATION",
+            "PERIOD"
+        ],
+        "correct": ["TIME"]
+    }
+];
+
+</script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Типы JOIN в SQL</title>
+<link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
+
+</head>
+<body>
+<div class="fixed-top" id="fixedTop">
+    <button class="check-btn" onclick="checkAnswers()" style="display: none;">Проверить</button>
+    <button class="reset-btn" onclick="resetTest()" style="display: none;">Начать заново</button>
+    <a href="../index.html" class="return-button">Вернуться на главную</a>
+</div>
+
+<div id="startContainer">
+    <h1>Типы JOIN в SQL</h1>
+    <button class="start-btn" onclick="startTest()">Начать тест</button>
+</div>
+
+<div id="testContainer">
+</div>
+
+<div id="results">
+    <h3>Результаты:</h3>
+    <ul id="resultList"></ul>
+</div>
+
+<script>
+const questions = [
+{
+    "question": "1. Какой тип JOIN возвращает только строки, где есть совпадения в обеих таблицах?",
+    "answers": [
+        "LEFT JOIN",
+        "RIGHT JOIN",
+        "INNER JOIN",
+        "FULL OUTER JOIN"
+    ],
+    "correct": ["INNER JOIN"]
+},
+{
+    "question": "2. Какой JOIN вернёт все строки из левой таблицы, даже если нет совпадений в правой?",
+    "answers": [
+        "INNER JOIN",
+        "RIGHT JOIN",
+        "LEFT JOIN",
+        "CROSS JOIN"
+    ],
+    "correct": ["LEFT JOIN"]
+},
+{
+    "question": "3. Что вернёт запрос с RIGHT JOIN, если в правой таблице нет совпадений с левой?",
+    "answers": [
+        "Только совпадающие строки",
+        "Все строки из правой таблицы с NULL для левой",
+        "Все строки из обеих таблиц",
+        "Ничего не вернёт"
+    ],
+    "correct": ["Все строки из правой таблицы с NULL для левой"]
+},
+{
+    "question": "4. Какой JOIN используется для декартова произведения таблиц?",
+    "answers": [
+        "FULL JOIN",
+        "SELF JOIN",
+        "CROSS JOIN",
+        "INNER JOIN"
+    ],
+    "correct": ["CROSS JOIN"]
+},
+{
+    "question": "5. Что делает FULL OUTER JOIN?",
+    "answers": [
+        "Возвращает только общие строки",
+        "Объединяет LEFT и RIGHT JOIN, включая все строки обеих таблиц",
+        "Возвращает только уникальные строки из левой таблицы",
+        "Исключает NULL-значения"
+    ],
+    "correct": ["Объединяет LEFT и RIGHT JOIN, включая все строки обеих таблиц"]
+},
+{
+    "question": "6. Задача: Есть таблицы `Users` (id, name) и `Orders` (id, user_id, amount). Как получить всех пользователей, даже если у них нет заказов?",
+    "answers": [
+        "SELECT * FROM Users INNER JOIN Orders ON Users.id = Orders.user_id",
+        "SELECT * FROM Users LEFT JOIN Orders ON Users.id = Orders.user_id",
+        "SELECT * FROM Users RIGHT JOIN Orders ON Users.id = Orders.user_id",
+        "SELECT * FROM Users CROSS JOIN Orders"
+    ],
+    "correct": ["SELECT * FROM Users LEFT JOIN Orders ON Users.id = Orders.user_id"]
+},
+{
+    "question": "7. Задача: Таблицы `Employees` (id, name) и `Departments` (id, emp_id, name). Как найти всех сотрудников, не привязанных ни к одному отделу?",
+    "answers": [
+        "SELECT * FROM Employees INNER JOIN Departments ON Employees.id = Departments.emp_id",
+        "SELECT * FROM Employees LEFT JOIN Departments ON Employees.id = Departments.emp_id WHERE Departments.emp_id IS NULL",
+        "SELECT * FROM Employees RIGHT JOIN Departments ON Employees.id = Departments.emp_id",
+        "SELECT * FROM Employees FULL JOIN Departments ON Employees.id = Departments.emp_id"
+    ],
+    "correct": ["SELECT * FROM Employees LEFT JOIN Departments ON Employees.id = Departments.emp_id WHERE Departments.emp_id IS NULL"]
+},
+{
+    "question": "8. Задача: Как получить все возможные комбинации строк из таблиц `A` и `B`?",
+    "answers": [
+        "SELECT * FROM A INNER JOIN B ON A.id = B.id",
+        "SELECT * FROM A LEFT JOIN B ON A.id = B.id",
+        "SELECT * FROM A CROSS JOIN B",
+        "SELECT * FROM A FULL JOIN B ON A.id = B.id"
+    ],
+    "correct": ["SELECT * FROM A CROSS JOIN B"]
+},
+{
+    "question": "9. Какой JOIN вернёт только строки из левой таблицы, для которых нет совпадений в правой?",
+    "answers": [
+        "LEFT JOIN с условием ON right_table.id IS NULL",
+        "INNER JOIN",
+        "RIGHT JOIN",
+        "FULL JOIN"
+    ],
+    "correct": ["LEFT JOIN с условием ON right_table.id IS NULL"]
+},
+{
+    "question": "10. Задача: Таблицы `Students` (id, name) и `Grades` (id, student_id, grade). Как найти всех студентов, у которых есть оценки?",
+    "answers": [
+        "SELECT * FROM Students LEFT JOIN Grades ON Students.id = Grades.student_id",
+        "SELECT * FROM Students INNER JOIN Grades ON Students.id = Grades.student_id",
+        "SELECT * FROM Students RIGHT JOIN Grades ON Students.id = Grades.student_id",
+        "SELECT * FROM Students FULL JOIN Grades ON Students.id = Grades.student_id"
+    ],
+    "correct": ["SELECT * FROM Students INNER JOIN Grades ON Students.id = Grades.student_id"]
+}
+];
+
+</script>
+</body>
+</html>

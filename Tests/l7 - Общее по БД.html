@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Общее по БД</title>
+<link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
+
+</head>
+<body>
+<div class="fixed-top" id="fixedTop">
+    <button class="check-btn" onclick="checkAnswers()" style="display: none;">Проверить</button>
+    <button class="reset-btn" onclick="resetTest()" style="display: none;">Начать заново</button>
+    <a href="../index.html" class="return-button">Вернуться на главную</a>
+</div>
+
+<div id="startContainer">
+    <h1>Общее по БД</h1>
+    <button class="start-btn" onclick="startTest()">Начать тест</button>
+</div>
+
+<div id="testContainer">
+</div>
+
+<div id="results">
+    <h3>Результаты:</h3>
+    <ul id="resultList"></ul>
+</div>
+
+<script>
+const questions = [
+{
+        "question": "1. Какие существуют базы данных?",
+        "answers": [
+            "Только реляционные",
+            "Реляционные и нереляционные",
+            "Только нереляционные",
+            "Гибридные и облачные"
+        ],
+        "correct": ["Реляционные и нереляционные"]
+    },
+    {
+        "question": "2. Какие базы данных называются реляционными?",
+        "answers": [
+            "Данные хранятся в виде документов.",
+            "Данные хранятся в оперативной памяти.",
+            "Данные хранятся в нескольких таблицах.",
+            "Данные хранятся в виде графов."
+        ],
+        "correct": ["Данные хранятся в нескольких таблицах."]
+    },
+    {
+        "question": "3. Чем связаны таблицы в реляционных базах данных?",
+        "answers": [
+            "С помощью Foreign Key.",
+            "С помощью Primary Key.",
+            "С помощью индексов.",
+            "С помощью триггеров."
+        ],
+        "correct": ["С помощью Foreign Key."]
+    },
+    {
+        "question": "4. Какие из перечисленных инструментов являются СУБД?",
+        "answers": [
+            "Redis, Elastic",
+            "MongoDB, Neo4j",
+            "Clickhouse, Tarantool",
+            "MySQL, PostgreSQL"
+        ],
+        "correct": ["MySQL, PostgreSQL"]
+    },
+    {
+        "question": "5. Чем отличаются MySQL и PostgreSQL?",
+        "answers": [
+            "Типами данных",
+            "Скоростью работы",
+            "Количеством пользователей",
+            "Языком программирования"
+        ],
+        "correct": ["Типами данных"]
+    },
+    {
+        "question": "6. Что такое Метабейс?",
+        "answers": [
+            "Это база данных",
+            "Это программа",
+            "Это язык запросов",
+            "Это протокол передачи данных"
+        ],
+        "correct": ["Это программа"]
+    },
+    {
+        "question": "7. Какая из представленных нереляционных баз данных является документо-ориентированной?",
+        "answers": [
+            "MongoDB",
+            "Redis",
+            "Clickhouse",
+            "Elastic",
+            "Neo4j",
+            "Tarantool"
+        ],
+        "correct": ["MongoDB"]
+    },
+    {
+        "question": "8. Какая из представленных нереляционных баз данных является столбчатой?",
+        "answers": [
+            "Redis",
+            "Elastic",
+            "Clickhouse",
+            "Neo4j",
+            "Tarantool",
+            "MongoDB"
+        ],
+        "correct": ["Clickhouse"]
+    },
+    {
+        "question": "9. Какая из представленных нереляционных баз данных является поисковой?",
+        "answers": [
+            "Elastic",
+            "Redis",
+            "MongoDB",
+            "Neo4j",
+            "Tarantool",
+            "Clickhouse"
+        ],
+        "correct": ["Elastic"]
+    },
+    {
+        "question": "10. Какая из представленных нереляционных баз данных содержит в себе ключ - значение?",
+        "answers": [
+            "MongoDB",
+            "Elastic",
+            "Neo4j",
+            "Redis",
+            "Tarantool",
+            "Clickhouse"
+        ],
+        "correct": ["Redis"]
+    },
+    {
+        "question": "11. Какая из представленных нереляционных баз данных является графовой?",
+        "answers": [
+            "Redis",
+            "Neo4j",
+            "MongoDB",
+            "Elastic",
+            "Tarantool",
+            "Clickhouse"
+        ],
+        "correct": ["Neo4j"]
+    },
+    {
+        "question": "12. Какая из представленных нереляционных баз данных является in memory?",
+        "answers": [
+            "Redis",
+            "MongoDB",
+            "Tarantool",
+            "Elastic",
+            "Neo4j",
+            "Clickhouse"
+        ],
+        "correct": ["Tarantool"]
+    },
+    {
+        "question": "13. Что такое Slave база данных?",
+        "answers": [
+            "Это реплика, копия основной базы данных.",
+            "Это основная база данных, которая обрабатывает все запросы.",
+            "Это резервная копия, которая не используется в работе.",
+            "Это база данных, которая хранит только метаданные."
+        ],
+        "correct": ["Это реплика, копия основной базы данных."]
+    },
+    {
+        "question": "14. В чем отличие Slave базы данных от Master?",
+        "answers": [
+            "Slave для записи, Master — только для чтения.",
+            "Slave для чтения, Master — чтение и редактирование; Slave обновляется по крону от Master.",
+            "Slave и Master полностью идентичны.",
+            "Slave не синхронизируется с Master."
+        ],
+        "correct": ["Slave для чтения, Master — чтение и редактирование; Slave обновляется по крону от Master."]
+    },
+    {
+        "question": "15. Что такое крон?",
+        "answers": [
+            "Тип базы данных.",
+            "Планировщик, который используется для выполнения задачи в определенное время или циклично.",
+            "Язык запросов.",
+            "Метод шифрования данных."
+        ],
+        "correct": ["Планировщик, который используется для выполнения задачи в определенное время или циклично."]
+    },
+    {
+        "question": "16. Что делает балансировщик?",
+        "answers": [
+            "Шифрует данные в базе.",
+            "Удаляет дублирующиеся записи.",
+            "Создает резервные копии.",
+            "Регулирует нагрузку и распределяет запросы между Slave и Master."
+        ],
+        "correct": ["Регулирует нагрузку и распределяет запросы между Slave и Master."]
+    },
+    {
+        "question": "17. Типы операций в базах данных (CRUD)?",
+        "answers": [
+            "Create, Read, Update, Delete",
+            "Copy, Remove, Undo, Delete",
+            "Create, Remove, Update, Drop",
+            "Copy, Read, Undo, Drop"
+        ],
+        "correct": ["Create, Read, Update, Delete"]
+    },
+    {
+        "question": "18. Как называется группа последовательных операций с базой данных?",
+        "answers": [
+            "Запрос",
+            "Скрипт",
+            "Транзакция",
+            "Процедура"
+        ],
+        "correct": ["Транзакция"]
+    },
+    {
+        "question": "19. Как называется набор рекомендаций для баз данных?",
+        "answers": [
+            "CRUD",
+            "SQL",
+            "ACID",
+            "REST"
+        ],
+        "correct": ["ACID"]
+    },
+    {
+        "question": "20. Какое понятие гарантирует, что каждая транзакция будет выполнена полностью или не будет выполнена совсем?",
+        "answers": [
+            "Isolation (Изолированность)",
+            "Atomicity (Атомарность)",
+            "Consistency (Консистентность)",
+            "Durability (Надёжность)"
+        ],
+        "correct": ["Atomicity (Атомарность)"]
+    },
+    {
+        "question": "21. Какое понятие говорит о том, что параллельные транзакции не должны оказывать влияние на результат друг друга?",
+        "answers": [
+            "Isolation (Изолированность)",
+            "Atomicity (Атомарность)",
+            "Consistency (Консистентность)",
+            "Durability (Надёжность)"
+        ],
+        "correct": ["Isolation (Изолированность)"]
+    },
+    {
+        "question": "22. Какое понятие говорит о том, что, если пользователь получил подтверждение от системы, что транзакция выполнена, он может быть уверен, что сделанные им изменения не будут отменены из-за сбоя?",
+        "answers": [
+            "Durability (Надёжность)",
+            "Atomicity (Атомарность)",
+            "Isolation (Изолированность)",
+            "Consistency (Консистентность)"
+        ],
+        "correct": ["Durability (Надёжность)"]
+    }
+];
+
+</script>
+</body>
+</html>

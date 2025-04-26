@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Операторы и агрегатные функции в MySQL</title>
+<link rel="stylesheet" href="styles.css">
+<script src="script.js" defer></script>
+
+</head>
+<body>
+<div class="fixed-top" id="fixedTop">
+    <button class="check-btn" onclick="checkAnswers()" style="display: none;">Проверить</button>
+    <button class="reset-btn" onclick="resetTest()" style="display: none;">Начать заново</button>
+    <a href="../index.html" class="return-button">Вернуться на главную</a>
+</div>
+
+<div id="startContainer">
+    <h1>Операторы и агрегатные функции в MySQL</h1>
+    <button class="start-btn" onclick="startTest()">Начать тест</button>
+</div>
+
+<div id="testContainer">
+</div>
+
+<div id="results">
+    <h3>Результаты:</h3>
+    <ul id="resultList"></ul>
+</div>
+
+<script>
+const questions = [
+{
+    "question": "Какая агрегатная функция возвращает количество строк в выборке?",
+    "answers": [
+        "SUM()",
+        "AVG()",
+        "COUNT()",
+        "MAX()"
+    ],
+    "correct": ["COUNT()"]
+},
+{
+    "question": "Что вернёт запрос: `SELECT AVG(salary) FROM employees WHERE department = 'QA';`?",
+    "answers": [
+        "Сумму зарплат QA-отдела",
+        "Среднюю зарплату QA-отдела",
+        "Максимальную зарплату QA-отдела",
+        "Количество сотрудников в QA-отделе"
+    ],
+    "correct": ["Среднюю зарплату QA-отдела"]
+},
+{
+    "question": "Какой оператор используется для проверки на NULL?",
+    "answers": [
+        "=",
+        "!=",
+        "IS NULL",
+        "<>"
+    ],
+    "correct": ["IS NULL"]
+},
+{
+    "question": "Что делает оператор `COALESCE(field, 'default')`?",
+    "answers": [
+        "Заменяет NULL на указанное значение",
+        "Суммирует все значения поля",
+        "Возвращает первое ненулевое значение из списка",
+        "Конвертирует поле в строку"
+    ],
+    "correct": ["Заменяет NULL на указанное значение", "Возвращает первое ненулевое значение из списка"]
+},
+{
+    "question": "Как найти дубликаты email в таблице `users`?",
+    "answers": [
+        "SELECT email FROM users GROUP BY email;",
+        "SELECT email, COUNT(*) FROM users GROUP BY email HAVING COUNT(*) > 1;",
+        "SELECT DISTINCT email FROM users;",
+        "SELECT email FROM users WHERE email IS NOT NULL;"
+    ],
+    "correct": ["SELECT email, COUNT(*) FROM users GROUP BY email HAVING COUNT(*) > 1;"]
+},
+{
+    "question": "Какой оператор исключает дубликаты из выборки?",
+    "answers": [
+        "UNION",
+        "UNION ALL",
+        "DISTINCT",
+        "GROUP BY"
+    ],
+    "correct": ["DISTINCT"]
+},
+{
+    "question": "Как найти сотрудников с зарплатой выше средней в таблице `employees`?",
+    "answers": [
+        "SELECT * FROM employees WHERE salary > AVG(salary);",
+        "SELECT * FROM employees WHERE salary > (SELECT AVG(salary) FROM employees);",
+        "SELECT * FROM employees HAVING salary > AVG(salary);",
+        "SELECT AVG(salary) FROM employees HAVING salary > AVG(salary);"
+    ],
+    "correct": ["SELECT * FROM employees WHERE salary > (SELECT AVG(salary) FROM employees);"]
+},
+{
+    "question": "Что вернёт `SELECT SUM(salary) FROM employees GROUP BY department;`?",
+    "answers": [
+        "Общую сумму зарплат по всем отделам",
+        "Сумму зарплат для каждого отдела отдельно",
+        "Среднюю зарплату по отделам",
+        "Ошибку из-за отсутствия HAVING"
+    ],
+    "correct": ["Сумму зарплат для каждого отдела отдельно"]
+},
+{
+    "question": "Какой оператор используется для фильтрации после GROUP BY?",
+    "answers": [
+        "WHERE",
+        "HAVING",
+        "LIMIT",
+        "ORDER BY"
+    ],
+    "correct": ["HAVING"]
+},
+{
+    "question": "Как выбрать 3 самых высокооплачиваемых сотрудника?",
+    "answers": [
+        "SELECT * FROM employees ORDER BY salary DESC LIMIT 3;",
+        "SELECT * FROM employees GROUP BY salary LIMIT 3;",
+        "SELECT MAX(salary) FROM employees LIMIT 3;",
+        "SELECT * FROM employees HAVING salary = MAX(salary) LIMIT 3;"
+    ],
+    "correct": ["SELECT * FROM employees ORDER BY salary DESC LIMIT 3;"]
+},
+{
+    "question": "Что делает оператор `BETWEEN`?",
+    "answers": [
+        "Проверяет вхождение в диапазон (включительно)",
+        "Проверяет соответствие шаблону",
+        "Сравнивает два значения",
+        "Объединяет условия OR"
+    ],
+    "correct": ["Проверяет вхождение в диапазон (включительно)"]
+},
+{
+    "question": "Как найти сотрудников, чьи имена начинаются на 'A'?",
+    "answers": [
+        "SELECT * FROM employees WHERE name LIKE 'A%';",
+        "SELECT * FROM employees WHERE name = 'A';",
+        "SELECT * FROM employees WHERE name IN ('A');",
+        "SELECT * FROM employees WHERE name BETWEEN 'A' AND 'B';"
+    ],
+    "correct": ["SELECT * FROM employees WHERE name LIKE 'A%';"]
+},
+{
+    "question": "Какой оператор вернёт разницу между двумя выборками?",
+    "answers": [
+        "UNION",
+        "INTERSECT",
+        "EXCEPT",
+        "MINUS"
+    ],
+    "correct": ["EXCEPT", "MINUS"]
+},
+{
+    "question": "Как объединить результаты двух запросов без удаления дубликатов?",
+    "answers": [
+        "Использовать UNION",
+        "Использовать UNION ALL",
+        "Использовать JOIN",
+        "Использовать DISTINCT"
+    ],
+    "correct": ["Использовать UNION ALL"]
+},
+{
+    "question": "Что вернёт `SELECT CONCAT(name, ' (', department, ')') FROM employees;`?",
+    "answers": [
+        "Ошибку из-за неверного синтаксиса",
+        "Строки в формате 'Имя (Отдел)'",
+        "Сумму длины name и department",
+        "NULL, если department NULL"
+    ],
+    "correct": ["Строки в формате 'Имя (Отдел)'", "NULL, если department NULL"]
+},
+{
+    "question": "Как выбрать все столбцы из таблицы `users`?",
+    "answers": [
+        "SELECT columns FROM users;",
+        "SELECT * FROM users;",
+        "SELECT all FROM users;",
+        "GET * FROM users;"
+    ],
+    "correct": ["SELECT * FROM users;"]
+},
+{
+    "question": "Как выбрать только столбцы `name` и `email` из таблицы `users`?",
+    "answers": [
+        "SELECT name, email FROM users;",
+        "SELECT (name, email) FROM users;",
+        "SELECT name AND email FROM users;",
+        "SELECT name + email FROM users;"
+    ],
+    "correct": ["SELECT name, email FROM users;"]
+},
+{
+    "question": "Как выбрать уникальные значения столбца `department` из таблицы `employees`?",
+    "answers": [
+        "SELECT UNIQUE department FROM employees;",
+        "SELECT DISTINCT department FROM employees;",
+        "SELECT DIFFERENT department FROM employees;",
+        "SELECT department FROM employees GROUP BY department;"
+    ],
+    "correct": ["SELECT DISTINCT department FROM employees;", "SELECT department FROM employees GROUP BY department;"]
+},
+{
+    "question": "Как выбрать первые 5 записей из таблицы `orders`?",
+    "answers": [
+        "SELECT * FROM orders LIMIT 5;",
+        "SELECT TOP 5 * FROM orders;",
+        "SELECT * FROM orders WHERE ROWNUM <= 5;",
+        "SELECT FIRST 5 * FROM orders;"
+    ],
+    "correct": ["SELECT * FROM orders LIMIT 5;"]
+},
+{
+    "question": "Как отсортировать выборку из таблицы `products` по убыванию цены (`price`)?",
+    "answers": [
+        "SELECT * FROM products ORDER BY price ASC;",
+        "SELECT * FROM products ORDER BY price DESC;",
+        "SELECT * FROM products SORT BY price DESC;",
+        "SELECT * FROM products GROUP BY price DESC;"
+    ],
+    "correct": ["SELECT * FROM products ORDER BY price DESC;"]
+},
+{
+    "question": "Как выбрать всех пользователей из таблицы `users`, у которых email заканчивается на `@gmail.com`?",
+    "answers": [
+        "SELECT * FROM users WHERE email LIKE '%@gmail.com';",
+        "SELECT * FROM users WHERE email = '@gmail.com';",
+        "SELECT * FROM users WHERE email ENDS WITH '@gmail.com';",
+        "SELECT * FROM users WHERE email MATCHES '@gmail.com';"
+    ],
+    "correct": ["SELECT * FROM users WHERE email LIKE '%@gmail.com';"]
+},
+{
+    "question": "Как выбрать данные из таблицы `logs` за определенную дату (например, 2023-10-01)?",
+    "answers": [
+        "SELECT * FROM logs WHERE date = '2023-10-01';",
+        "SELECT * FROM logs WHERE date BETWEEN '2023-10-01' AND '2023-10-02';",
+        "SELECT * FROM logs WHERE date LIKE '2023-10-01%';",
+        "Все варианты верны"
+    ],
+    "correct": ["Все варианты верны"]
+},
+{
+    "question": "Как переименовать столбец `user_name` в `username` в результатах запроса?",
+    "answers": [
+        "SELECT user_name AS username FROM users;",
+        "SELECT user_name TO username FROM users;",
+        "SELECT user_name RENAME username FROM users;",
+        "SELECT username = user_name FROM users;"
+    ],
+    "correct": ["SELECT user_name AS username FROM users;"]
+},
+{
+    "question": "Как посчитать общее количество заказов в таблице `orders`?",
+    "answers": [
+        "SELECT COUNT(*) FROM orders;",
+        "SELECT SUM(*) FROM orders;",
+        "SELECT TOTAL(*) FROM orders;",
+        "SELECT AMOUNT(*) FROM orders;"
+    ],
+    "correct": ["SELECT COUNT(*) FROM orders;"]
+},
+{
+    "question": "Как выбрать данные из двух таблиц: `users` и `orders`, где `user_id` совпадает?",
+    "answers": [
+        "SELECT * FROM users, orders WHERE users.id = orders.user_id;",
+        "SELECT * FROM users JOIN orders ON users.id = orders.user_id;",
+        "SELECT * FROM users INNER JOIN orders ON users.id = orders.user_id;",
+        "Все варианты верны"
+    ],
+    "correct": ["Все варианты верны"]
+},
+{
+    "question": "Как добавить условие для выборки (например, только активные пользователи)?",
+    "answers": [
+        "SELECT * FROM users WHERE is_active = 1;",
+        "SELECT * FROM users IF is_active = 1;",
+        "SELECT * FROM users HAVING is_active = 1;",
+        "SELECT * FROM users FILTER is_active = 1;"
+    ],
+    "correct": ["SELECT * FROM users WHERE is_active = 1;"]
+},
+{
+    "question": "Как объединить результаты двух запросов (например, `SELECT name FROM users` и `SELECT name FROM admins`)?",
+    "answers": [
+        "SELECT name FROM users AND SELECT name FROM admins;",
+        "SELECT name FROM users UNION SELECT name FROM admins;",
+        "SELECT name FROM users JOIN SELECT name FROM admins;",
+        "SELECT name FROM users + SELECT name FROM admins;"
+    ],
+    "correct": ["SELECT name FROM users UNION SELECT name FROM admins;"]
+},
+{
+    "question": "Как выбрать записи, где значение столбца `age` находится в диапазоне от 18 до 30?",
+    "answers": [
+        "SELECT * FROM users WHERE age >= 18 AND age <= 30;",
+        "SELECT * FROM users WHERE age BETWEEN 18 AND 30;",
+        "SELECT * FROM users WHERE age IN (18, 30);",
+        "Оба первых варианта верны"
+    ],
+    "correct": ["Оба первых варианта верны"]
+},
+{
+    "question": "Как выбрать записи, где `status` равен 'active' или 'pending'?",
+    "answers": [
+        "SELECT * FROM users WHERE status = 'active' OR status = 'pending';",
+        "SELECT * FROM users WHERE status IN ('active', 'pending');",
+        "SELECT * FROM users WHERE status LIKE 'active%' OR LIKE 'pending%';",
+        "Первый и второй варианты верны"
+    ],
+    "correct": ["Первый и второй варианты верны"]
+},
+{
+    "question": "Как посчитать количество уникальных `user_id` в таблице `orders`?",
+    "answers": [
+        "SELECT COUNT(DISTINCT user_id) FROM orders;",
+        "SELECT UNIQUE COUNT(user_id) FROM orders;",
+        "SELECT COUNT(UNIQUE user_id) FROM orders;",
+        "SELECT SUM(DISTINCT user_id) FROM orders;"
+    ],
+    "correct": ["SELECT COUNT(DISTINCT user_id) FROM orders;"]
+}
+];
+
+</script>
+</body>
+</html>

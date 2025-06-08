@@ -33,3 +33,18 @@
 🔹 Подготовка к собеседованиям
 
 🔹 Преподаватели QA дисциплин
+
+
+<div style="border: 1px solid #e1e4e8; padding: 15px; border-radius: 6px; background: #f6f8fa; margin: 10px 0;">
+
+## 📂 Структура проекта
+```python
+/
+├── Tests/          # Тесты по темам
+├── Game/           # Викторина
+├── ico/            # Фавиконки и мета-теги
+├── index.html      # Главная страница
+└── README.md       # Этот файл
+```
+
+</div>
